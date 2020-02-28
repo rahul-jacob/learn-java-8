@@ -1,0 +1,10 @@
+Interface Comparable<T>
+
+
+@FunctionalInterface
+public interface Comparable<T>
+
+a. Abstract method
+	compareTo(T o)
+	Compares this object with the specified object for order.
+
