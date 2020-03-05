@@ -1,0 +1,18 @@
+
+@Functional Interface
+public interface Function<T,R>
+	accepts a value as input and returns a result as output.
+	
+	Abstract method
+	R	apply(T t)
+
+Function Chaining.
+
+For Joining functions we have 2 default methods
+ 1. andThen 
+	 f1.andThen(f2).apply(T t) -> Here f1 gets invoked and then f2 gets invoked
+ 2. compose
+	 f1.compose(f2).apply(T t) -> Here f2 gets invoked and then f1 gets invoked
+	 
+The only difference b/w andThen and compose is the order in which the functions are getting invoked.
+	 

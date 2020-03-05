@@ -10,8 +10,10 @@ public class StringLength {
 		Predicate<String> lengthChecker = s -> s.length() > 5;
 		String val = "Bibek";
 		String val1 = "Ashwin";
-		System.out.println("Using Predicate checking the length of the string "+val+ "is greater thann 5 "+lengthChecker.test(val));
-		System.out.println("Using Predicate checking the length of the string "+val1+ "is greater thann 5 "+lengthChecker.test(val1));
+		String val2 = "Aby";
+		System.out.println("Using Predicate checking the length of the string "+val+ "is greater than 5 "+lengthChecker.test(val));
+		System.out.println("Using Predicate checking the length of the string "+val1+ "is greater than 5 "+lengthChecker.test(val1));
+		System.out.println("Using Predicate checking the length of the string "+val2+ "is greater than 5 "+lengthChecker.test(val2));
 
 	}
 
