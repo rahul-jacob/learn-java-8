@@ -41,9 +41,7 @@ public class StudentRankList {
 			computeRank.apply(studObj);
 			System.out.println(studObj);
 		}
-
 	}
-
 }
 
 class Student{
