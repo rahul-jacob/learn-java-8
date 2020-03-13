@@ -5,4 +5,6 @@
 ## Purpose
 	Tutorial for comman layman to understand git and github.
 ## Deployment
+	Job scheduled to deploy at 22:00 on a daily basis.
 ## How To Contribute
+	Subscribe to my channel and click the bell icon for my latest updates.
