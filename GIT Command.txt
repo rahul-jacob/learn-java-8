@@ -1182,6 +1182,77 @@ we can see that the we don't have the label's or branch-name associated when we 
 
 Conflicting Merges and Resolution
 ---------------------------------
+Now we will understand and resolve merge confilicts.
+Most of the times you will be doing a fast forward merge or merges that could result in fast forward or GIT is going to resolve the merges automatically. However sometimes you are going to run into conflicts and you are going to need to resolve them. lets see with an example.
+
+We need to be in a clear working directory. Once typeed 
+git branch
+we can see only the master branch.
+
+Now we are going to modify the simple.html file on one branch switch back to master and do similar change in the same file simple.html and that too in the same area's. So that it will result in a conflict. 
+
+Perhaps this can occur if two different developers working on different branches and they have to come together and there changes are not yet compatable. Somebody has to sit and work down the issues.
+
+1. Now lets us create a branch real-work
+$ git checkout -b real-work
+Now the branch has been created and we have switched into it.
+If we type git branch 
+we can see the newly created branch real-work and an asterisk against it.
+
+2.Now lets edit the simple.html file
+ 	- body of the page
+	- footer
+	- title
+	- paragraph
+and save.
+Now if we type git status we can see that simple.html is now modified.
+3. Commit the file
+$ git commit -am "Making changes to simple.html in real-work branch"
+if we type git status we have a clean working directory.
+
+4. Now we switch to master
+$ git checkout master
+
+5. Now we edit the same file simple.html, Now lets create some changes for conflicting with the other branch.
+ 	- body of the page
+	- footer
+	- title
+	- paragraph
+and save.
+Now if we type git status we can see that simple.html is now modified.
+
+6. Now the commit the file in master branch
+$ git add simple.html
+$ git commit
+Now it invokes the editor and i type in the message  "Commiting file info master branch"
+
+7. View the logs
+$ git log --oneline --decorate --graph --allows
+Now git shows that our work is diverged we have real-work and master with different changes. 
+
+8. Compare the files in both the branch using difftool or diff
+$ git diff master real-work 
+Now when we compare we can view the changes in the same line hence we can assure that conflict occurs.
+To view the changes visually
+$ git difftool master real-work
+And we can visually inspect the changes between the two branches.
+
+9. Now Merge the code from real-work to master
+So from master, we do the merge
+$ git merge real-work
+When we press enter we get a merge conflict error the branch name changes from master to master|MERGING
+Following are the output results that git displays as a part of merge
+1. Auto-merging simple.html
+	GIT first tried to do a auto-merge
+2. CONFLICT (content): Merge conflict in simple.html
+	GIT couldn't do the auto-merging so it resulted in a conflict in the content.
+3. Automatic merge failed : fix conflict and the commit the result
+	So Automatic merge Failed, so now we have to fix the conflict's 
+4. (merge|MERGING)
+	So we are merging against the master so we are in a MERGING state or neither in a clean working directory or in a staged area or in between state of merging.
+6.32	
+
+
 
 
 	
