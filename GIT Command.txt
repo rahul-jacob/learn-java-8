@@ -484,9 +484,9 @@ $ git config --global --list
 $ git config --global -e
 Press Enter and the config file opens in notepad++
 
---------------------------------------------------
-Adding the file and commiting the file in one step (Express Commit)
---------------------------------------------------
+--------------------------------------------------------------------------------------
+Adding the file and commiting the file in one step (Express Commit/Stream line commit)
+--------------------------------------------------------------------------------------
 A tracked file is a file which git is tracking actively. i.e any file that is commited or added to staging area. This is also called as Express Commit.
 git commit -am "Commiting Files As Per the Defect In Rally"
 
@@ -1009,18 +1009,26 @@ Now if i try listing the branch git branch -a, i can see the newly added branch 
 
 Switch branches
 ---------------
-To switch from one branch to another we use the command
+To switch from one branch to another we use the git checkout command
 $ git checkout branchName
 here branchName is the name of the branch that you need to switch.
 eg: git checkout mynewbranch
 Now if you type git branch -a, you can see that the asterisk(*) is not moved to the new branch mynewbranch.
+
+Alternative Approach
+--------------------
+Another way to creating a new branch and switching it to the newly added branch is by using the below command
+$ git checkout -b branchName
+where branchName is the name of the new branch
+ -b helps us to branch or switch to the newly created branch.
+Now you are in the newly created branch. Where as if you are not using -b then you will still be in the current branch you won't be switching to the newly created branch.
 	
 Now lets see how this is displayed in the history or logs
 ---------------------------------------------------------
 $ git log --oneline --decorate
 e060e24 (HEAD, origin/master, origin/HEAD, mynewbranch,master)
 You will see something interesting here, the first commit which is our last commit has several labels associated with it. So we have HEAD which always points to the last commit on the current branch. origin/master, origin/HEAD, mynewbranch and master. So HEAD and origin/HEAD are simple pointers to the last commit on the respective branches both local and then remote. master is the branch which we are working with all along and the mynewbranch is the branch we just created.
-Since we haven't made any changes yet all the branch labels are pointing to the same commit. Thats because branches are just labels or pointers. Our new branch wont actually branch off as we say until we have new commits that are unique from master.
+Since we haven't made any changes yet all the branch labels are pointing to the same commit. Thats because branches are just labels or pointers. Our new branch wont actually branch off as we say until we have new commits that are unique from master. i.e the prompt updated with the newly created branch name.
 
 Renaming a branch
 -----------------
@@ -1035,8 +1043,149 @@ Delete a branch
 If we no longer need a branch
 $ git branch -d branchName
 where branchName is the name of the branch that is to be deleted.
-We cannot delete a branch in which we are currently on.
+We cannot delete a branch in which we are currently on. you need to switch to another branch to delete it.
 Now if we type git branch -a, we can see that our branch no longer exits.
+
+Fast Forward (Happy Path)
+-------------------------
+Now let's start some branching and merging examples.
+
+1. go to the repository
+2. type $ git branch -a
+3. create a new branch title-change
+$ git checkout -b title-change
+4. modify the html file.
+	Change Title
+	Change Body
+5. type git status and we can see the html file is modified.
+6. do an express commit 
+$ git commit -am "simple.html file changed"
+7. check the log
+$ git log --oneline
+We can see our commit at the top. So we have currently commited a change in the title-change branch and we need to move it into master.
+First thing we need to do is 
+a) Change back to master branch
+$ git checkout master
+Before i do a merge i need to know the differences are.
+$ git diff master title-change
+Now we can see the differences b/w the branch, if we need to see it visually then git difftool master title-change
+Now after reviewing we do the merege
+b) To do the merge we use the merge command
+$ git merge title-change
+Doing so git will respond to the merge 
+	1.Updating 
+	2.Hashes or commit id
+	3.Fast-forward - It tells that the merge is a fastforwarded one
+	4.simple.html - the files involved in the merge
+	5.Status - deleted or inserted count.
+Fast forwarded Merge
+--------------------
+Since this was a fast forwarded merge, effectively what just happened was Git just placed all the commits on the master branch as if we never branch away.
+Fast forwarding is only really possible when there are no changes being made in the target branch, which is what we just did. We created a branch did some changes and we merged back. we didn't do any additional work in the master or target branch before doing the merge.
+
+Now we view the log
+$ git log --oneline --graph --decorate
+Now we can see the HEAD is pointing to the lastest commit on the current branch. And the title-change and master is also pointing to the same commit as well. Now if we list our branches 
+$ git branch
+Now we can see 2 branches master and title-change, since we have already merged the title-change to our master we no longer need it so to delete the branch we type the command
+$ git branch -d title-change
+Now if we type git branch we can see only the master branch.
+Now if we type git log
+git log --oneline --graph --decorate
+At the top commit we can see only the master branch. the title-change is removed.
+
+Disable Fast forward Merge (Happy path without fast forward)
+
+We need to be in a clear working directory. Once typeed 
+git branch
+we can see only the master branch.
+1. Now lets us create a branch add-copyright
+$ git checkout -b add-copyright
+Now the branch has been created and we have switched into it.
+If we type git branch 
+we can see the newly created branch add-copyright and an asterisk against it.
+2. Lets modify the file by adding a copyright details and the start and end of the html file.
+Save the file.
+3. Now check the status by
+$ git status
+4. Now we commit the file
+$ git commit -am "Adding copy right information"
+5. Now we also modify the README.md file
+Save the file
+6. Now we commit the file 
+$ git commit -am "Adding copyright info to README.md file"
+Now we have 2 files commited in the add-copyright branch.
+7. Now if we check our logs
+$ git log --oneline --decorate --graph
+Now you can see the copyright information at the top. Press q to exit and lets integrate the changes to our master branch.
+8. For that first switch to Master branch from add-copyright branch
+$ git checkout master
+9. For Merging the add-copyright branch to master type the code
+  git merge add-copyright
+Now this time i want to preserve the fact that we branched off so i am going to disable the fast forwarding capability by specifying the --no-ff option
+$ git merge add-copyright --no-ff
+Now when we press enter its going to do a merge commit. So we end up with a commit message which the editor displays as 'Merge branch add-copyright'. So now we want to save and close.
+10. Now we check the log
+$ git log --oneline --decorate --graph
+Now if we look at the logs we can see the graph line being preserved.
+11. Now we have integrated the changes now we can get rid of the branch
+$ git branch -d add-copyright
+12. Now if we view the log
+$ git log --oneline --graph --decorate
+we can see that the we don't have the label's or branch-name associated when we branch off. i.e the branching still occurs but we don't have a label associated that's all.
+
+Automatic Merges
+----------------
+So Now we have covered how to create a branch, do some work on it and merge it into master. But in the happy path scenario where we result in a fast forward merge, even going as far as to disable the fast forward merge scenario but we still have that condition present. So the next step is to go through the process but this time there will be an automatic merge and result in a merge commit automatically.
+
+We need to be in a clear working directory. Once typeed 
+git branch
+we can see only the master branch.
+1. Now lets us create a branch simple-changes
+$ git checkout -b simple-changes
+Now the branch has been created and we have switched into it.
+If we type git branch 
+we can see the newly created branch add-copyright and an asterisk against it.
+2.Now lets edit first file that is independent of each other.
+ - make changes for file1
+ git status we can see file1 is modified.
+3. Commit the file
+ git commit -am "File Modified 1 in simple-changes branch"
+4.Now lets edit second file that is independent of each other.
+ - make changes for file2
+ git status we can see file1 is modified.
+5. Commit the file
+ git commit -am "File Modified 2 in simple-changes branch"
+6. For that first switch to Master branch from add-copyright branch
+$ git checkout master 
+7. Before merging the changes in i am going to make change to a file in the master. This could be done by another developer or you can do the change by context switching (branch switching) so lets update the README.md file (Note that you should change a file which you have not updated in the simple-changes branch....)
+Save the file and type git status, we have one modified file.
+8.Now the commit the file in master branch
+$ git commit -am "Commiting file info master branch"
+9. Now if we view the log
+$ git log --oneline --decorate --graph
+You can see an interesting thing in the top of the log, we have a commit on the simple changes that is different and we have a commit on the master.
+10. Now Merge the code from simple-changes to master
+So from master, we do the merge
+$ git merge simple-changes -m "Merging changes from simple-changes to master"
+ where -m is the message.
+Since we know that this merge results in a commit so in quotes we give the commit message.
+11 Repeat the git log command
+$ git log --oneline --decorate --graph --all
+So if you notice the top log, so we can see that when the merge happended. that we have the merge commit and the simple-changes is still preserved as a separate branch. 
+12. Now we have integrated the changes now we can get rid of the branch
+$ git branch -d simple-changes.
+12. Now if we view the log
+$ git log --oneline --graph --decorate
+we can see that the we don't have the label's or branch-name associated when we branch off. i.e the branching still occurs but we don't have a label associated that's all.
+13. Now we check and ensure that our file changes are present.
+
+Conflicting Merges and Resolution
+---------------------------------
+
+
+	
+
 
 
 
