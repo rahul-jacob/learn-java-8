@@ -1,7 +1,7 @@
 # Starter Web Project
 	This is a sample file for showing the git operations using command line.
 ## Introduction
-	
+	This is a sample code to understand commands in GIT
 ## Purpose
 	
 ## Deployment
