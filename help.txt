@@ -5,5 +5,6 @@
 ## Purpose
 	
 ## Deployment
+	This activity is an automated process which will be done at 1:00am every day.
 	
-## How To Contribute	
+## How To Contribute
