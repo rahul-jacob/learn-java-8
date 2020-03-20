@@ -1,0 +1,1390 @@
+---------------------------------------------
+Displaying current User and Email of the repo
+---------------------------------------------
+git config user.name
+git config user.email
+
+---------------------------------------------
+Displaying global User and Email of the repo
+---------------------------------------------
+git config --global user.name
+git config --global user.email
+
+--------------------------------
+Getting the latest from a branch
+--------------------------------
+When we use the pull keyword we are fetching all the informations from the repository i.e from all the branches and multiple repo if present.
+In such case its not safe to use pull keyword. what we need to do is 
+1. first fetch all changes from the repo this will take all the changes  from the repository
+and store it in our local .git folder but it will not merge with the file system. (git fetch origin)
+2. secondly merge the prefered repo manually(git merge origin/develop)
+git fetch origin
+git merge origin/develop
+
+-----------------------------
+Fetch all Changes from remote
+-----------------------------
+git fetch --all
+
+Adding files to Git
+-------------------
+git add prepares the new and existing files for staging . It adds all the new and existing file/directories to the staging area
+1.git init
+2.git add README.md
+3.git commit -m "first commit"
+4.git remote add origin git@github.build.ge.com:502643138/mv-expert-ui.git
+5.git push -u origin master
+
+List All Branches From Remote
+-----------------------------
+git branch --remote
+
+GIT Fetch
+---------
+If a new branch is added then we need to do a git fetch so that all the branches will be copied on our m/c. i.e it will be copied to our local .git folder.
+Cloning new branch
+------------------
+git clone git@github.build.ge.com:DataBridge/databridge.git
+enter the passphase
+
+git clone git@github.build.ge.com:SIMSDEV/sims.git
+enter the passphase
+
+Geting started with the project means getting started with the latest version of the project. But in git you have all the versions of the project from when the
+project is started. This process is called cloning.
+For this get the clone url from the git repository.
+
+git clone cloneUrl
+Upon success message you now have all the latest source code and you are now ready to work.
+
+
+Cloning a specific branch
+-------------------------
+git clone git@github.build.ge.com:DataBridge/databridge.git@develop-june
+
+Checkout
+--------
+git checkout sims_post_release_7_merge
+
+To revert a code 
+git checkout -- src/main/resources/log4j2.json
+
+Deleting a branch (Develop )from local
+--------------------------------------
+git branch -D develop
+
+Adding a file
+-------------
+git add prepares the new and existing files for staging . It adds all the new and existing file/directories to the staging area
+git add filename.extension
+git add .
+
+-----------------------------------
+Updating the git index while adding
+-----------------------------------
+git add -u
+if we are doing many operation such as add, modify and delete then we can forcefully update the index of git using the command git add -u
+
+Commit
+------
+//Before Commiting a set of files we need to add them. then you need to use the commit command.
+
+git commit
+git commit -m "My first Commit inline"
+man git-commit
+Initialize/Create a repository
+------------------------------
+git init - Converts the current folder into a git repository.
+
+git init myGitFolder - Creates a folder myGitFolder and converts into a git repository.
+c:\user\git\myGitFolder\.git\
+
+Now we have created a complete repository. Means we have a .git folder and our working directory.
+
+We also have something called bare bone repository. To create a bare repository simply pass in a flag.
+
+git init --bare barerepo
+This creates a barerepo with the git folder but does not have a working directory. Now what is the use consider this like a point of collaboration, if you drop this directory somewhere else where others can access this via secured shell you just setted up a very simple git server. you can now use that a point of colaboration to share work back and forth.
+
+
+List .git folder
+----------------
+ls -al
+
+List the remote git repo
+------------------------
+git remote -v
+
+Git Push
+---------
+git push origin sims_release_7_Hotfix
+
+Git Stash
+---------
+There can be situations where we need not commit few files, they may be config related or something. In such case such files need not be shown when typing git
+status command.
+So we stash them, where the file will be moved to a staging area.later on you can bring back from the staging location to your workspace.
+
+git stash --adds the list of files to git staging area.
+git stash pop --reverts or clears the files from the staging area to your workspace.
+
+Know your branch
+----------------
+git branch
+Lists all branch
+----------------
+git branch -a
+
+Create New Branch in local and checkout from another branch
+-----------------
+git checkout -b salesorder (Created a sales order branch local repo)
+git push origin salesorder (Created a sales order branch on remote repo)
+git checkout -b develop origin/develop
+
+
+Delete Branch
+-------------
+delete the hotfix branch
+git branch -d hotfix
+Deleted branch hotfix (3a0874c).
+
+Pull from master
+-----------------
+git pull origin master
+git pull (pulls code from current branch)
+
+Merging from branch to master
+This can be done in 2 ways.
+1. From command prompt
+	In command prompt its straight forward
+	git pull origin master
+	git push origin master
+2. From GIT Web
+But in Web we have a review process first then once its over we push the code to master.
+Step 1 : Go to repository (https://github.build.ge.com/DataBridge/)
+Step 2 : Next to the branch drop down we have a button called New Pull Request
+Step 3 : Compare changes select the branch where change needs to be done. You can see the list of files changed and their changes
+Step 4 : In this step you can do a code reviewing you need to select Reviewers by clicking on the settings button. if no reviewer then verify it yourself and if ok you can click on the Create Pull Request. 
+Step 5 : Then you can see a message This branch has no conflicts with the base branch -> Click on the button Merge pull request.
+Step 6 : Give the comment, by default the last commit message will be displayed then click the button Merge.
+Step 7 : Once merging is complete you will get a message Pull request successfully merged and closed.
+
+Another way of doing merge to master
+
+1.Do the changes in branch salesorder
+2.Push the changes to remote sales
+3.check out master from local
+	$ git checkout master
+4.merge the branch sales order with master	in your local
+	$ git merge salesorder
+5.once merged then push the code to remote master
+	$ git push master	
+Git Stash
+---------
+git stash => It is equvalent to git stash push. Move the change files to temp location (stash)
+This is used when we are working on one branch where we have uncommited code, then we have a requirement to work on another branch. So before checkout the new 
+branch standing from our current branch we go a git stash(moves change files to a temp locaton)
+
+git stash pop
+Restores the old changes back to our branch.
+
+git stash list
+Displays when it was stashed. Or how many items are stashed.
+
+git stash show
+Displays the stashed files
+
+Generating a new SSH key (via gitbash)
+------------------------
+1. Open Git Bash.
+2. Paste the text below, substituting in your GitHub email address
+ssh-keygen -t rsa -b 4096 -C "e.rahuljacob@gmail.com"
+or
+ssh-keygen -t rsa -b 4096
+3.When you're prompted to "Enter a file in which to save the key," press Enter. This accepts the default file location.
+Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]
+4.At the prompt, type a secure passphrase. For more information, see "Working with SSH key passphrases".
+enter passphrase (empty for no passphrase): [Type a passphrase]
+Enter same passphrase again: [Type passphrase again]
+
+
+Generating a new SSH key (via gitGui)
+------------------------
+1. Open Git UI.
+2. Menu -> Help
+3. On top left hand side there is generate SSH Click.
+4. Upon clicking a new file will ge generated to C:\Users\1223204\.ssh folder.
+
+How to remove files that were alredy added to GIT
+-------------------------------------------------
+--Make sure your .class files were not already added to the index
+git rm -r --cached *.class
+the files will be remived from index. then commit them. Then add to gitignore.
+
+
+Creating a new branch (temp branch) from the current branch based on a commit fa1f8225cb62aa272486cbf42e3abce2b9154df1
+-----------------------------------------------------
+git checkout -b temp fa1f8225cb62aa272486cbf42e3abce2b9154df1
+
+Creating a new branch(Develop) from another branch (temp)
+git checkout -b develop temp
+
+git remote -v
+
+Merging from one branch to another (Merging of 2 branches)
+----------------------------------
+Consider you have one branch TASK A, and you have antoher branch say TASK B.
+Now you need to merge all the code from TASK A branch to TASK B branch. do the following steps
+1. once you finish your chages in TASK A branch(commit or sync with current branch or take a pull)
+2. do a pull for TASK A to ensure that we have all the latest code.
+3. git checkout TASK B
+4. From branch B finish your task (by comitting or pushing your code with current branch or take a pull)
+5. do a pull for TASK B to ensure that we have all the latest code.
+6. for merging stay in TASK B branch and type git merge TASK A
+
+Reverting a file from current branch
+------------------------------------
+git checkout filename
+git checkout  src/main/resources/application.properties
+
+
+Reverting a file or comparing a file with previous commits
+----------------------------------------------------------
+
+
+
+Viewing the changes of all files using commit id
+------------------------------------------------
+git show commit_id
+git show fe6458761c7c15652386778e50ce34d59aa3c826
+
+
+Reverting a commit in local (Make sure the data is not pushed to server)
+---------------------------
+1. Type git logs and check you commit is there also note your commit id and previous users commit id.
+Please take the backup of your changes before giving the step 2
+2. git reset --hard HEAD^
+you can see the message "HEAD is now at 9e148823 created a utilty class for cover page name generation and other utilites to be used in print volume."
+this HEAD at 9e148823 is your previous commit. (all your changes will be lost hence take the backup of your changes before this command)
+
+
+Reverting the entire branch to a particualr commit.
+---------------------------------------------------
+1. Type git logs note the previous users commit id.
+Please take the backup of your changes before giving the step 2
+2.
+git reset --hard b5beb75242d1562ea9f46fead6ab43bf042c8ef0
+HEAD is now at b5beb7524 Print volume code added
+3. Take latest pull to get all the codes
+**************************************************************
+Configuring your email and username
+-----------------------------------
+$ git config --global user.name "First Last"
+$ git config --global user.email "myemail@domain.com"
+
+Listing your configuration properties
+-------------------------------------
+1. Lists the global properties(for all repositories)
+		file location : (~/.gitconfig)
+$ git config --global --list
+
+2. Lists the local properties (particular repository)
+		file location : (.git/config)
+tree command
+------------
+ - tree command gives us a recursive directory listing.
+tree .git
+
+Initialize/Create a repository
+------------------------------
+git init - Converts the current folder into a git repository.
+
+git init myGitFolder - Creates a folder myGitFolder and converts into a git repository.
+c:\user\git\myGitFolder\.git\
+
+Now we have created a complete repository. Means we have a .git folder and our working directory.
+
+We also have something called bare bone repository. To create a bare repository simply pass in a flag.
+
+git init --bare barerepo
+This creates a barerepo with the git folder but does not have a working directory. Now what is the use consider this like a point of collaboration, if you drop this directory somewhere else where others can access this via secured shell you just setted up a very simple git server. you can now use that a point of colaboration to share work back and forth.
+
+graph history
+-------------
+git log --oneline --graph
+This shows all the version's of our project, The asterisks(*) and yellow line indicates all the versions of our project. And these versions are available in our local hard disk.
+
+Git States / Checking Statuses
+------------------------------
+When interacting with GIT there are 4 states for a file. 
+1.Untracked - Which means that file is not under control by GIT
+2.Unmodified - GIT knows about the file, but it hasn't changed.
+3.Modified - GIT knows about it and the file has been changed.
+4.Staged - That the file is ready to commit.
+
+git status
+git add fileOne - add this file to the stage or add this to the index.
+git add prepares the new and existing files for staging . It adds all the new and existing file/directories to the staging area
+One file can be in multiple stages. Such as consider
+1.one file fileOne is added to git repo.
+2.now check the status. - you can see fileOne is in the staged row
+3.now modifiy the fileOne again.
+4.now check the status - you can see fileOne is present in the staged row as well as in the modified row. Means one file maintains different stage or parts.
+
+git status -sb (summary & branch)
+
+git config --global alias.st 'status -sb' //alias name
+git st - now if i execute git st it will check the config alias.st and find it correcponds to the command 'status -sb'
+
+Git Commit
+----------
+Commit - Creates a snapshot and saves to GIT History. When you are comitting you are using the index, its kind of like a workbench to put the whole parts together this is called staging area or staging changes.
+git commit will take a snapshot and record all the changes into the repository
+eg:Consider i have a file - file1
+1. I make couple of changes to this file1 you add one line in the middle and modify an existing value. save
+2. Check the status.
+File is in the modified stage - nothing is in staged.
+3. If i need to see the changes. then type 
+git diff
+4. You can see 2 hunks - hunks is nothing but all the things that are after the (2 atherate) @@ lines in the editor, after making sure the changes  i now type git status to ensure once again.
+5. git add file1 - moves the unmodified file to stage
+6. git status shows in green which tells us that its in stage and ready to commit.
+7.git commit - now an editor is opened and it tells the status to be commited. provide the commit message and quit.
+or git commit -m 'commit message'
+
+Another quick way to commit.
+----------------------------
+If your modified file is not staged then type
+git commit -av (all changes & verbose) this drops into my editor which shows the difference or changes to the file. I can quit by providing an empty commit message and quit. or provide the commit message and quit (wq).
+
+man git-commit
+
+Advance Commits
+---------------
+Now consider the above example where we made changes to a file by adding a new line and modifying a value. when we type git diff we see 2 hunks.
+Where the first change (adding a new line) and the second change (modifying an existing line) both changes are not dependent, they are independent to each other. so we want to push this as separate commits not as a single one. In this case index will help us, the index is helps us to stage different parts of the file at different times there are too many ways.
+1. command line
+git add --patch
+-Appears as differend hunk go to each one and type y or n. give one as y and the other as n
+-Now type git status you can see one fileOne in the staged and the same fileOne in modified too.
+-Now to understand better type git commit -v (verify)
+-Give the comment and exit.
+Now type git status
+-Give you can see the file is in the modified area
+Now type git commit -av
+
+2.On GUI
+Open git gui go to the hunk and right click Stage Hunk for Commit. then this change will move to stage.
+Now one commit this file with the message
+Now we have only the remaining one hunk, double click and move it to stage
+And commit with a message.
+
+GIT Hosting:
+------------
+In order to work with other people you need to put the code so that others can also access them. This is generally called Git Hosting.
+There are several ways to accomplish it.
+1.SSH
+a.Best with Linux Server
+b.Need to have a git user account
+c.Each user should create a SSH Key
+d.SSH in and create repository
+e.git@servername:project.git
+f.git-shell
+Pros
+a.Free
+b.No specific s/w or h/w we already have everything.
+c.Very secure
+Cons
+a.GIT only
+b.Highly technical not user freiendly
+c.Many steps 
+d.audit control is difficult.
+e.No auditing
+2.Internet Hosting
+a.GitHub,GitLab,Bigbucket
+b.Easy administration
+c.Easy Project management
+d.Accessable for non-technical
+e.Access over HTTPS
+f.Extra
+	Issue Tracking
+	code review
+	documentation.
+	pull request.
+3.On-Premises hosting
+a.Runs on your machine
+b.Runs inside your n/want
+c.Github Enterprise,Stash, GitLab
+d.Equivalent to Internet Services.
+
+
+Remote Repositories:
+--------------------
+
+
+
+
+	
+
+
+
+
+Writing a file
+--------------
+echo "Test Git Quick Start demo" >> start.txt
+This will write the content into a new file start.txt
+
+-----------------
+Displaying a file
+-----------------
+cat start.txt
+This is display the contents of the file start.txt
+----------------------------------------------------
+Installing a Text Editor and configure to Git
+----------------------------------------------------
+Now we will configure the Notepad++ with Git so that we can run with command environment.
+1. Open git bash and type 
+$ notepad++
+if we get an error notepad++ command not found then we need to install it.
+2. Exit gitbash
+3. Find where is notepad++ installed and copy the path i.e C:\Program Files\Notepad++
+4. Copy the path to our environment variable path just like we did for java and all.
+5. Open a new git bash and type
+$ notepad++
+And it opens.
+
+----------------------------------------------------------------------
+Provide Alias to notepad++ as npp and open a new instance of notepad++
+----------------------------------------------------------------------
+Its always recommended to create the file in user's home directory.
+1. Open git bash
+2. Type notepad++ .bash_profile
+and press enter.
+3. Notepad++ will prompt to confirm whether the new file should be created.
+4. Type 
+alias npp='notepad++.exe -multiInst -nosession'
+Save and close the file.
+5.close gitbash
+6.open a new gitbash and type npp
+The notepad++ is opened.
+
+--------------------------------------------------
+How to configure notepad++ as default text editor
+--------------------------------------------------
+1. Open gitbash
+2. And lets view the current global config which are present
+$ cat ~/.gitconfig
+Press Enter. The symbol tild '~' denotes user's home directory.
+3. now we use the git config command to make notepad++ as our default text editor
+$ git config --global core.editor "notepad++.exe -multiInst -nosession"
+Press Enter.
+4. Verify the newly added property in the config file
+$ git config --global --list
+5. Now we will test whether it works so we will try to open the config file in edit mode
+$ git config --global -e
+Press Enter and the config file opens in notepad++
+
+--------------------------------------------------------------------------------------
+Adding the file and commiting the file in one step (Express Commit/Stream line commit)
+--------------------------------------------------------------------------------------
+A tracked file is a file which git is tracking actively. i.e any file that is commited or added to staging area. This is also called as Express Commit.
+git commit -am "Commiting Files As Per the Defect In Rally"
+
+----------------------------------------
+To find whether a file is tracked or not
+----------------------------------------
+git ls-files
+Identifying the tracked file
+	- Add a new file to the repo (xyz.txt)
+	- type the command $ git status and you can see xyz.txt is untracked.
+	- also type git ls-files (the file xyz.txt won't be listed)
+	- type git add xyz.txt
+	- git status now the file will be tracked and its a new file.
+	- also type git ls-files (the file xyz.txt will be listed)
+	
+
+One of the advantages of staging areas is we build up our files for commit. i.e we only want to use the -a parameter in the commit command when we dont want to add any changes to that commit, we make it simple and straing forward edit to an existing file. when we have a change that will expand multiple file then we definitely want to use the staging area.
+
+-------------------------
+Adding files recursively
+-------------------------
+git add .
+
+-----------------------------------
+Updating the git index while adding
+-----------------------------------
+git add -u
+if we are doing many operation such as add, modify and delete then we can forcefully update the index of git using the command git add -u
+
+--------------------------------
+Backout Changes (Revert Changes)
+--------------------------------
+a) From Staged to Unstage (Changes done to the file will be present only thing is the file will be moved from staged to unstage area)
+git reset HEAD filename.txt
+Now if i type git status, i can see the file has moved from stage to unstaged area
+
+b) To revert latest from repo(I dont want my changes in the file i.e i just want the state of the file that is last commited)
+git checkout -- filename.txt
+Now if i type git status i can see the file is not there in unstaged or staged area. since i have reverted the file to its last commit there is not changes hence it won't be listed. So now we have the lastest file that was last comitted.
+
+-------------------------
+Renaming or moving a file
+-------------------------
+We can do a delete or move operation in 2 ways 
+1. Either using git mv or rm command
+2. Or by using any file manager s/w that is associated with operating system
+
+a) Renaming a file using git
+git mv current_filename.txt new_filename.txt
+
+git mv file-level3.txt level3.txt
+Now if i do a ls
+level3.txt
+Now if i do a git status i can see that git has already understood a rename has taken place and the file is now in staged area but its not commited means i can also backout if needed.
+
+b) Renaming the file at operating system level with out using git.
+mv current_filename.txt new_filename.txt
+
+mv file-level3.txt level3.txt
+Now if i do a ls
+level3.txt
+Now if i do a git status git sees it as 2 operations
+1. It see's that you deleted the old file (staged area)
+2. And added a old file. (untracked file)
+So now we need to add the file, since we have done this outside our git environment, we use add command with an extra parameter.
+	git add -A
+	the option -A will add any files that is recursively changed but also it will update any files that is renamed, moved or deleted in the working directory
+Now if i do a git status i can see that git has already understood a rename took place and the file is now in staged area and its not comitted.
+
+c) Rename a file and backing it out.
+	- git mv file-level3.txt level3.txt
+	- ls => level3.txt
+	- git status => file in staging area
+	- now if we want to backout we can either use git reset HEAD level3.txt or we have an easier approach git mv level3.txt file-level3.txt
+	- now if i type git status i can see a clean working directory, git tells us that there is no change.
+	
+d) Move the file to another directory
+Moving a file from one level/folder to another level/folder
+git currentfile.txt newpath
+Now currentfile.txt will be moved from current directory to newpath directory
+
+git level2.txt dirlevel3
+now if we do ls we cannot see the file level2.tx
+we go up a level/folder cd dirlevel3
+type ls
+we can see the file level2.txt
+Now if we type git status we can see that git has already staged the file and git understands that a move operation has taken place and its not comitted.
+
+e) Move the file to another directory with out using git
+mv file-level3.txt level3.txt
+Now if i do a ls
+level3.txt
+Now if i do a git status git sees it as 2 operations
+1. It see's that you deleted the old file (staged area)
+2. And added a old file. (untracked file)
+So now we need to add the file, since we have done this outside our git environment, we use add command with an extra parameter.
+	git add -A
+	the option -A will add any files that is recursively changed but also it will update any files that is renamed, moved or deleted in the working directory
+Now if i do a git status i can see that git has already understood a rename took place and the file is now in staged area and its not comitted.
+
+--------------
+Deleting Files
+--------------
+a) Deleting an untracked file
+We will create a simple file named doomed.txt and add some contents.
+ - Now if i type git status i can see one untracked file doomed.txt
+ - Now id i want to delete this by using the git rm command
+ - git rm doomed.txt -> git will complain that doomed.txt didn't match any files, this is because its untracked file. so we need to use the operating system's delete functionality for deleting the file.
+ - rm doomed.txt
+ - if i do a ls the file is gone, if i do a status i have a clean working directory.
+ 
+b) Deleting an tracked file
+We will create a simple file named doomed.txt and add some contents.
+ - Now if i type git status i can see one untracked file doomed.txt 
+ - Add the file git add doomed.txt
+ - Now type status  we can see doomed.txt is not added to staging area commit the file.
+ - Now type git ls -files towards the bottom we can see doomed.txt
+ - Now one way to delete the file tracked by git is by using the git rm command, git rm filename.txt
+ - git rm doomed.txt
+ - now if we type ls command we can see that the file doomed.txt is not listed in the directory
+ - now if we type status git has staged the file by identifying it as deletion operation has taken place and is not comitted.
+ 
+c) Backing out a deleted file from staged area. 
+ We will create a simple file named doomed.txt and add some contents.
+ - Now if i type git status i can see one untracked file doomed.txt 
+ - Add the file git add doomed.txt
+ - Now type status  we can see doomed.txt is not added to staging area commit the file.
+ - Now type git ls -files towards the bottom we can see doomed.txt
+ - Now one way to delete the file tracked by git is by using the git rm command, git rm filename.txt
+ - git rm doomed.txt
+ - now if we type ls command we can see that the file doomed.txt is not listed in the directory
+ - now if we type status git has staged the file by identifying it as deletion operation has taken place and is not comitted.
+ - Now we need to revert it so we type the reset HEAD command
+ - git reset HEAD doomed.txt
+ - Now if we type the ls command we cannot see the file doomed.txt yet 
+ - Now if we type git status the file doomed.txt is still in the untracked list. so what did the reset HEAD command do it moved the file from the staging area to the untracked area.
+ - Now we need to checkout the doomed.txt command.
+ - Now if we type ls we can see the doomed.txt file in the directory
+ - Now if i do a git status now it shows us a clear working directory.
+ 
+d) Deleting an tracked file with out using git
+We will create a simple file named doomed.txt and add some contents.
+ - Now if i type git status i can see one untracked file doomed.txt 
+ - Add the file git add doomed.txt
+ - Now type status  we can see doomed.txt is not added to staging area commit the file.
+ - Now type git ls -files towards the bottom we can see doomed.txt
+ - Another way to delete the file tracked by git is by using the rm command i.e with out using the git as prefix, rm filename.txt
+ - now id i type ls i cannot see the file in the directory
+ - if i type git status i can see the file is deleted and its in the staging area.
+ - git add -A
+ the option -A will add any files that is recursively changed but also it will update any files that is renamed, moved or deleted in the working directory
+ - Now if i do a git status git now has the files staged.
+ 
+
+History/Log
+-----------
+To view the git history type the command 
+$ git log
+
+We can understand more about by log command by typing the help command
+$ git help log
+It has several options and we will explore a few
+
+$ git log
+Displays the default view in reverse cronological order, i.e starts with the last commit.
+Following informations are available 
+1. commit followed by a long string (shaawvan). This long string is a unique identifier that tells git about every commit.
+2. Next we have the author and email id.
+3. Next is the date when the commit happened.
+4. Next the commit message.
+
+If we want the commit id's (shaawvan) to be shortened then
+$ git log --abbrev-commit
+In this the commit id is shortened it consist of 6 charaters which will help us to identify a commit.
+
+One liner
+$ git log --oneline
+
+Now we will try another option
+$ git log --oneline --graph --decorate
+--online   : What this will do is it will compress all the information in one line.
+--graph    : What this will do is provide an ascii graph depicting the branching graph
+--decorate : Will add any labels or tags or any thing that sort of annotates our commits.
+
+Another way to view the logs is by providing a range of commit ids
+$ git log ae6f872...761b911
+
+Another view is to display logs based on dates
+$ git log --since="3 days ago"
+
+Now lets view the commit history for an independent file
+$ git log -- filename.txt
+return's the commit for only specific file.
+
+Git show command
+----------------
+$ git show commit_id;
+Displays the given commit information
+Following informations are available 
+1. commit followed by a long string (shaawvan). This long string is a unique identifier that tells git about every commit.
+2. Next we have the author and email id.
+3. Next is the date when the commit happened.
+4. Next the commit message.
+5. And the difference basically what has changed.
+
+----------
+Git Alias
+----------
+How to add aliases in git
+For eg: we have a big git command such as
+	$ git log --all --graph --decorate --oneline
+We can view a neat log history of all my commits in the git repository. But involves a lot of writing to be done for this display. So what i can do is i can write my own command that is an alias which will give me the exact same output but with a shorter command.
+
+So to add an alias 'hist'
+First i type git hist to check we have a existing command 'hist' in git. if i get an error git : 'hist' is not a git command then we can go ahead with this alias 'hist'
+To create my own hist command i need to piggy back half of git config command. So i need to type
+$ git config --global alias.hist "log --all --graph --decorate --oneline"
+where --global -> we need the alias to be available regardless of our repository so that will be saved at the user level. 
+	  alias -> any configuration setting that starts with alias dot allows us to create a command.
+	  command -> We provide the full command in double quotes that i want to be issued leaving out the git keyword so in this case we just start with 
+				"log --all --graph --decorate --oneline"
+				double check the command and press Enter.
+				
+Now try the command
+$ git hist
+If the output is displayed then we added a new command in git as alias.
+
+Where the aliases are Stored
+-----------------------------
+If we know where aliases are stored we can modify the command when needed. And since we are using git's config command we need to open the .gitconfig file in the user's home directory.
+npp ~/.gitconfig
+This opens the gitconfig file and all our aliases will be in the aliase section of git config file. we can see the name of the command hist and the full command.
+We can modify save and re-run the $ git hist command to view the latest saved information.
+
+------------------------------------------------
+Ignoring Unwanted Files and Folders (.gitignore)
+------------------------------------------------
+In order to avoid Unwanted files and folders we use the facility of a text file called .gitignore. This .gitignore tracks all the files and folders that git should ignore.
+
+In order to check whether a .gitignore file is present we use the command
+	ls -al
+	This lists all the hidden files in the directory.
+However the .gitignore file should be present in the same level of .git folder.
+
+If the file is not present the we can create a new file with the name '.gitignore'
+Now the format of '.gitignore' is 
+1. One expression per line.
+2. The expression can be name of a specific file
+3. The expression can be a name of the folder.
+4. The expression can be a pattern like *.txt
+
+a) As of now we will add a specific file, open '.gitignore' file and type
+.DS_Store
+Save and type git status, we can see the earlier file .DS_Store is not present in the untracked file. and the .gitignore file is modified or is untracked.
+The .gitingore file is like any other ordinary file that need to be added to the version controller.
+$ git add .gitignore
+
+b) Now we will add a pattern *.log, open '.gitignore' file and type
+*.log
+So any file that ends with a .log will be captured by this inspection.
+Type git status and we can see that the *.log file is not there in the untracked file where as the file .gitignore is modified.
+
+c) Another scenario is a folder, open '.gitignore' file and type
+log
+
+----------------
+cleanup and Push
+----------------
+Sometimes when we type git status we can see a message 'Your branch is ahead of origin/master by 14 commits' means we have 14 commits on our local branch but it not there in remote branch. Its time for us to synchronize remote and local. So before pushing its best practice to first take a pull first then push the code.
+$ git pull origin master
+
+Now to push the code
+$ git push origin master
+where origin refers to the name of the remote repository that we have given in this repository. It refers back to the github repository and master is the default branch.
+
+--------------------------------------------
+Configuring Merge Tool and Diff Tool for Git
+--------------------------------------------
+We can use any merge or diff tool with Git. In the demo we have seen how to configure P4Merge, since i am using WinMerge or ExamDiff we will configure these as the default merge or diff tool for Git.
+
+Now we will configure the WinMergeU with Git so that we can run with command environment.
+1. Open git bash and type 
+$ WinMergeU
+if we get an error WinMergeU command not found then we need to install it.
+2. Exit gitbash
+3. Find where is WinMergeU installed and copy the path i.e C:\Program Files (x86)\WinMerge
+4. Copy the path to our environment variable path just like we did for java and all.
+5. Open a new git bash and type
+$ WinMergeU
+And it opens.
+Merge Tool
+----------
+git config --global merge.tool winmerge
+git config --global mergetool.winmerge.path "C:/Program Files (x86)/WinMerge/WinMergeU.exe"
+
+Note : With respece to windows we use backslash for specifying file paths but here we need to use forward slash for configuring paths in GIT.
+
+Disable Prompt
+git config --global mergetool.prompt false
+
+Diff Tool
+---------
+git config --global diff.tool winmerge
+git config --global difftool.winmerge.path "C:/Program Files (x86)/WinMerge/WinMergeU.exe"
+
+Note : With respece to windows we use backslash for specifying file paths but here we need to use forward slash for configuring paths in GIT.
+
+Disable Prompt
+git config --global difftool.prompt false
+
+git config --global -e
+
+
+--------------------------------
++ Understand Comparison's in GIT
+--------------------------------
+To understand comparison's we have different scenario's. As a part of the tutorial we will first create a file in all the 4 stages or level in GIT such as
+1. Working Area
+2. Staged Area
+3. Local repo
+4. Remote repo
+
+a)For this we create a file called README.md, add the following
+--------------------------------------------------------------- 
+# Starter Web Project
+	
+## Introduction
+
+## Purpose
+
+## Deployment
+
+## How To Contribute
+
+ - Add the file to GIT $ git add .
+ - Commit the file $ git commit -m "Initial File"
+ - Push the file $ git push origin master
+Now we have added the file to remote. 
+b)Modify the README.md and push
+-------------------------------
+# Starter Web Project
+	This is a sample file for showing the git operations using command line.
+## Introduction
+	
+## Purpose
+	
+## Deployment
+	
+## How To Contribute	
+ - Do a Express Commit the file $ git commit -am "Added Description"
+ - Push the file $ git push origin master
+
+c)Modify the README.md
+----------------------
+# Starter Web Project
+	This is a sample file for showing the git operations using command line.
+## Introduction
+	
+## Purpose
+	
+## Deployment
+	This activity is an automated process which will be done at 1:00am every day.
+## How To Contribute	
+ - Do a Express Commit the file $ git commit -am "Added Description"
+ - Push the file $ git push origin master 
+Now we have modified the file in the remote.
+
+d)Modify the README.md and commit
+---------------------------------
+# Starter Web Project
+	This is a sample file for showing the git operations using command line.
+## Introduction
+	This is a sample code to understand commands in GIT
+## Purpose
+	
+## Deployment
+	This activity is an automated process which will be done at 1:00am every day.
+	
+## How To Contribute
+ - Do a Express Commit the file $ git commit -am "Added Introduction" 	
+Now we have modified the file and commited. So the file is present in our local git repo.
+
+e)Modify the README.md and commit
+---------------------------------
+# Starter Web Project
+	This is a sample file for showing the git operations using command line.
+## Introduction
+	This is a sample code to understand commands in GIT
+## Purpose
+	
+## Deployment
+	This activity is an automated process which will be done at 1:00am every day.
+	
+## How To Contribute
+	If you like the content don't forget to subscribe and like also don't forget to click the bell icon.
+ - Do a Express Commit the file $ git commit -am "Added Purpose" Contribution to help.txt" 	
+Now we have modified the file and commited. So the file is present in our local git repo.
+
+f)Modify the README.md and add it but don't commit it
+-----------------------------------------------------
+# Starter Web Project
+	This is a sample file for showing the git operations using command line.
+## Introduction
+	This is a sample code to understand commands in GIT
+## Purpose
+	Tutorial for comman layman to understand git and github. (Staged)
+## Deployment
+	This activity is an automated process which will be done at 1:00am every day.
+	
+## How To Contribute
+	If you like the content don't forget to subscribe and like also don't forget to click the bell icon.
+ - Now Add the file.	
+Now we have modified the file added. So the file is present in our staging area.
+
+g)Modify the README.md and dont add it don't commit it
+------------------------------------------------------
+# Starter Web Project
+	This is a sample file for showing the git operations using command line.
+## Introduction
+	This is a sample code to understand commands in GIT
+## Purpose
+	Tutorial for comman layman to understand git and github. (Staged)
+## Deployment
+	This activity is an automated process which will be done at 1:00am every day.
+	
+## How To Contribute
+	If you like the content don't forget to subscribe and like also don't forget to click the bell icon.
+	
+## Feedbacks
+	Provide your feedbacks at githubtraining@git.com (Un-staged / Working directory)
+ 
+Now we have modified the file but not yet added. So the file is present in our git's working area.
+
+Comparison Exercise's
+---------------------
+1)Comparing Changes b/w unstaged and staged
+--------------------------------------------
+$ git diff
+When we type the git diff all the files in the git's working area or unstaged area versus staged area are displayed. If there are three files in the unstaged area then all the 3 files will be listed.
+
+Limiting comparison's to one file
+---------------------------------
+So In our example if i want to limit only the README.md file then i need to write
+$ git diff -- README.md
+
+The same can be viewed using WinMerge which is our default Git difftool
+$ git difftool -- README.md
+In this scenari the file will be opened in winmerge where we have one file from the local and another file from the actual repository path.
+
+
+Note
+/******************************/
+git diff
+
+Shows the changes between the working directory and the index. This shows what has been changed, but is not staged for a commit.
+
+git diff --cached
+git diff --cached origin/branch1 (staged Vs remote)
+git diff -R --cached origin/branch1 (remote Vs staged) -R option is to reverse the difference.
+
+Shows the changes between the index and the HEAD (which is the last commit on this branch). This shows what has been added to the index and staged for a commit.
+
+git diff HEAD
+
+Shows all the changes between the working directory and HEAD (which includes changes in the index). This shows all the changes since the last commit, whether or not they have been staged for commit or not.
+/*********************************/
+
+
+2)Comparison between commits
+----------------------------
+Now we have taken the README.md file as example
+
+$ git log
+xyz123 File Added
+awer11 Description added
+l3l3o3 Copyrite added
+159822 removed spelling check
+
+
+we can see the list of commit id's. Now if we want to compare 2 commits then
+$ git diff reference1 reference2
+$ git diff 1313o3 HEAD
+where the pointer HEAD points to the last commit in the cureent branch.
+Now if you press Enter you can see all the changes that have happened of several files from the last commit to the specified commit.
+
+Alternative syntax.
+-------------------
+$ git diff HEAD HEAD^
+This compares HEAD and HEAD - 1.
+
+The same can be viewed using WinMerge which is our default Git difftool
+$ git difftool HEAD HEAD^
+i.e we can now visually see the difference between the last commit of the branch verses the commit just prior to the last commit in the branch.
+
+Now i am taking 2 reference commits
+$ git diff 159822 awerll
+Now we can see the differneces b/w the one side and the other. There are cases where reference exists by dev/null which indicates the file has not exists prior and the other side the file exists.
+For eg:
+---------------------
+--- /dev/null
++++ b/hipster.txt
+---------------------
+The above line indicates that the file is new.
+
+The same can be viewed using WinMerge which is our default Git difftool
+$ git difftool 159822 awerll
+In difftool we can see only one file at a time, close the first then we can see the other.
+
+3)Comparison between local and remote master branches
+-----------------------------------------------------
+Now we are going to compare between local repository branch and remote repository branch.
+Syntax is
+$ git diff rightsidecompare Vs leftsidecompare
+
+$ git diff master origin/master
+where origin is the name of the remote reference thats points to github and master is the branch on the git repository
+  and master is the local repository which is pointing to head.
+  
+To view this visually
+---------------------
+git difftool master origin/master
+
+-----------------------
++ Branching and Merging
+-----------------------
+
+As of now we are doing all our changes in the master, which is not a best practice. What we should be doing is separating our changes into branches which makes sence. At the simplest level we should be atleast be creating a feature branches or topic branches to isolate our changes and then integrate them back to the master branch once this feature or topic is stabilized or completed.
+
+To start of branches we will start with the listing of branch
+Listing of Branches
+-------------------
+$ git branch
+This will list down all the local branches on the m/c.
+
+$ git branch -a
+where -a list's both the local and remote branches, and the git branch command will put an asterisk(*) on the current active branch.
+there is a color coding
+	green -> current active
+	red -> all remote branch
+	gray -> locally repository branches available
+	
+Creating a new branch
+---------------------
+$ git branch branchName
+where branchName is the name of the new branch
+eg $ git branch mynewbranch
+
+Now if i try listing the branch git branch -a, i can see the newly added branch mynewbranch added in the local repository.
+
+Switch branches
+---------------
+To switch from one branch to another we use the git checkout command
+$ git checkout branchName
+here branchName is the name of the branch that you need to switch.
+eg: git checkout mynewbranch
+Now if you type git branch -a, you can see that the asterisk(*) is not moved to the new branch mynewbranch.
+
+Alternative Approach
+--------------------
+Another way to creating a new branch and switching it to the newly added branch is by using the below command
+$ git checkout -b branchName
+where branchName is the name of the new branch
+ -b helps us to branch or switch to the newly created branch.
+Now you are in the newly created branch. Where as if you are not using -b then you will still be in the current branch you won't be switching to the newly created branch.
+	
+Now lets see how this is displayed in the history or logs
+---------------------------------------------------------
+$ git log --oneline --decorate
+e060e24 (HEAD, origin/master, origin/HEAD, mynewbranch,master)
+You will see something interesting here, the first commit which is our last commit has several labels associated with it. So we have HEAD which always points to the last commit on the current branch. origin/master, origin/HEAD, mynewbranch and master. So HEAD and origin/HEAD are simple pointers to the last commit on the respective branches both local and then remote. master is the branch which we are working with all along and the mynewbranch is the branch we just created.
+Since we haven't made any changes yet all the branch labels are pointing to the same commit. Thats because branches are just labels or pointers. Our new branch wont actually branch off as we say until we have new commits that are unique from master. i.e the prompt updated with the newly created branch name.
+
+Renaming a branch
+-----------------
+$ git branch -m mynewbranch newbranch
+where -m is move.
+Now we modified the branch name from mynewbranch to newbranch.
+Now if we type git branch -a
+We can see that mynewbranch is renamed to newbranch.
+
+Delete a branch
+---------------
+If we no longer need a branch
+$ git branch -d branchName
+where branchName is the name of the branch that is to be deleted.
+We cannot delete a branch in which we are currently on. you need to switch to another branch to delete it.
+Now if we type git branch -a, we can see that our branch no longer exits.
+
+Another Approach
+----------------
+If we try to delete the branch by giving the below command
+$ git branch -d branchname
+We may sometimes get an error as shown below
+error: The branch 'ppd_common_feature' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D ppd_common_feature'.
+
+Then we need to provide -D option
+
+$ git branch -D branchname
+
+eg
+$ git branch -D ppd_common_feature
+Deleted branch ppd_common_feature (was 2d7589e).
+
+Fast Forward (Happy Path)
+-------------------------
+Now let's start some branching and merging examples.
+
+1. go to the repository
+2. type $ git branch -a
+3. create a new branch title-change
+$ git checkout -b title-change
+4. modify the html file.
+	Change Title
+	Change Body
+5. type git status and we can see the html file is modified.
+6. do an express commit 
+$ git commit -am "simple.html file changed"
+7. check the log
+$ git log --oneline
+We can see our commit at the top. So we have currently commited a change in the title-change branch and we need to move it into master.
+First thing we need to do is 
+a) Change back to master branch
+$ git checkout master
+Before i do a merge i need to know the differences are.
+$ git diff master title-change
+Now we can see the differences b/w the branch, if we need to see it visually then git difftool master title-change
+Now after reviewing we do the merege
+b) To do the merge we use the merge command
+$ git merge title-change
+Doing so git will respond to the merge 
+	1.Updating 
+	2.Hashes or commit id
+	3.Fast-forward - It tells that the merge is a fastforwarded one
+	4.simple.html - the files involved in the merge
+	5.Status - deleted or inserted count.
+Fast forwarded Merge
+--------------------
+Since this was a fast forwarded merge, effectively what just happened was Git just placed all the commits on the master branch as if we never branch away.
+Fast forwarding is only really possible when there are no changes being made in the target branch, which is what we just did. We created a branch did some changes and we merged back. we didn't do any additional work in the master or target branch before doing the merge.
+
+Now we view the log
+$ git log --oneline --graph --decorate
+Now we can see the HEAD is pointing to the lastest commit on the current branch. And the title-change and master is also pointing to the same commit as well. Now if we list our branches 
+$ git branch
+Now we can see 2 branches master and title-change, since we have already merged the title-change to our master we no longer need it so to delete the branch we type the command
+$ git branch -d title-change
+Now if we type git branch we can see only the master branch.
+Now if we type git log
+git log --oneline --graph --decorate
+At the top commit we can see only the master branch. the title-change is removed.
+
+Disable Fast forward Merge (Happy path without fast forward)
+------------------------------------------------------------
+We need to be in a clear working directory. Once typeed 
+git branch
+we can see only the master branch.
+1. Now lets us create a branch add-copyright
+$ git checkout -b add-copyright
+Now the branch has been created and we have switched into it.
+If we type git branch 
+we can see the newly created branch add-copyright and an asterisk against it.
+2. Lets modify the file by adding a copyright details and the start and end of the html file.
+Save the file.
+3. Now check the status by
+$ git status
+4. Now we commit the file
+$ git commit -am "Adding copy right information"
+5. Now we also modify the README.md file
+Save the file
+6. Now we commit the file 
+$ git commit -am "Adding copyright info to README.md file"
+Now we have 2 files commited in the add-copyright branch.
+7. Now if we check our logs
+$ git log --oneline --decorate --graph
+Now you can see the copyright information at the top. Press q to exit and lets integrate the changes to our master branch.
+8. For that first switch to Master branch from add-copyright branch
+$ git checkout master
+9. For Merging the add-copyright branch to master type the code
+  git merge add-copyright
+Now this time i want to preserve the fact that we branched off so i am going to disable the fast forwarding capability by specifying the --no-ff option
+$ git merge add-copyright --no-ff
+Now when we press enter its going to do a merge commit. So we end up with a commit message which the editor displays as 'Merge branch add-copyright'. So now we want to save and close.
+10. Now we check the log
+$ git log --oneline --decorate --graph
+Now if we look at the logs we can see the graph line being preserved.
+11. Now we have integrated the changes now we can get rid of the branch
+$ git branch -d add-copyright
+12. Now if we view the log
+$ git log --oneline --graph --decorate
+we can see that the we don't have the label's or branch-name associated when we branch off. i.e the branching still occurs but we don't have a label associated that's all.
+
+Automatic Merges
+----------------
+So Now we have covered how to create a branch, do some work on it and merge it into master. But in the happy path scenario where we result in a fast forward merge, even going as far as to disable the fast forward merge scenario but we still have that condition present. So the next step is to go through the process but this time there will be an automatic merge and result in a merge commit automatically.
+
+We need to be in a clear working directory. Once typeed 
+git branch
+we can see only the master branch.
+1. Now lets us create a branch simple-changes
+$ git checkout -b simple-changes
+Now the branch has been created and we have switched into it.
+If we type git branch 
+we can see the newly created branch add-copyright and an asterisk against it.
+2.Now lets edit first file that is independent of each other.
+ - make changes for file1
+ git status we can see file1 is modified.
+3. Commit the file
+ git commit -am "File Modified 1 in simple-changes branch"
+4.Now lets edit second file that is independent of each other.
+ - make changes for file2
+ git status we can see file1 is modified.
+5. Commit the file
+ git commit -am "File Modified 2 in simple-changes branch"
+6. For that first switch to Master branch from add-copyright branch
+$ git checkout master 
+7. Before merging the changes in i am going to make change to a file in the master. This could be done by another developer or you can do the change by context switching (branch switching) so lets update the README.md file (Note that you should change a file which you have not updated in the simple-changes branch....)
+Save the file and type git status, we have one modified file.
+8.Now the commit the file in master branch
+$ git commit -am "Commiting file info master branch"
+9. Now if we view the log
+$ git log --oneline --decorate --graph
+You can see an interesting thing in the top of the log, we have a commit on the simple changes that is different and we have a commit on the master.
+10. Now Merge the code from simple-changes to master
+So from master, we do the merge
+$ git merge simple-changes -m "Merging changes from simple-changes to master"
+ where -m is the message.
+Since we know that this merge results in a commit so in quotes we give the commit message.
+11 Repeat the git log command
+$ git log --oneline --decorate --graph --all
+So if you notice the top log, so we can see that when the merge happended. that we have the merge commit and the simple-changes is still preserved as a separate branch. 
+12. Now we have integrated the changes now we can get rid of the branch
+$ git branch -d simple-changes.
+12. Now if we view the log
+$ git log --oneline --graph --decorate
+we can see that the we don't have the label's or branch-name associated when we branch off. i.e the branching still occurs but we don't have a label associated that's all.
+13. Now we check and ensure that our file changes are present.
+
+Conflicting Merges and Resolution
+---------------------------------
+Now we will understand and resolve merge confilicts.
+Most of the times you will be doing a fast forward merge or merges that could result in fast forward or GIT is going to resolve the merges automatically. However sometimes you are going to run into conflicts and you are going to need to resolve them. lets see with an example.
+
+We need to be in a clear working directory. Once typeed 
+git branch
+we can see only the master branch.
+
+Now we are going to modify the simple.html file on one branch switch back to master and do similar change in the same file simple.html and that too in the same area's. So that it will result in a conflict. 
+
+Perhaps this can occur if two different developers working on different branches and they have to come together and there changes are not yet compatable. Somebody has to sit and work down the issues.
+
+1. Now lets us create a branch real-work
+$ git checkout -b real-work
+Now the branch has been created and we have switched into it.
+If we type git branch 
+we can see the newly created branch real-work and an asterisk against it.
+
+2.Now lets edit the simple.html file
+ 	- body of the page
+	- footer
+	- title
+	- paragraph
+and save.
+Now if we type git status we can see that simple.html is now modified.
+3. Commit the file
+$ git commit -am "Making changes to simple.html in real-work branch"
+if we type git status we have a clean working directory.
+
+4. Now we switch to master
+$ git checkout master
+
+5. Now we edit the same file simple.html, Now lets create some changes for conflicting with the other branch.
+ 	- body of the page
+	- footer
+	- title
+	- paragraph
+and save.
+Now if we type git status we can see that simple.html is now modified.
+
+6. Now the commit the file in master branch
+$ git add simple.html
+$ git commit
+Now it invokes the editor and i type in the message  "Commiting file info master branch"
+
+7. View the logs
+$ git log --oneline --decorate --graph --allows
+Now git shows that our work is diverged we have real-work and master with different changes. 
+
+8. Compare the files in both the branch using difftool or diff
+$ git diff master real-work 
+Now when we compare we can view the changes in the same line hence we can assure that conflict occurs.
+To view the changes visually
+$ git difftool master real-work
+And we can visually inspect the changes between the two branches.
+
+9. Now Merge the code from real-work to master
+So from master, we do the merge
+$ git merge real-work
+When we press enter we get a merge conflict error the branch name changes from master to master|MERGING
+Following are the output results that git displays as a part of merge
+1. Auto-merging simple.html
+	GIT first tried to do a auto-merge
+2. CONFLICT (content): Merge conflict in simple.html
+	GIT couldn't do the auto-merging so it resulted in a conflict in the content.
+3. Automatic merge failed : fix conflict and the commit the result
+	So Automatic merge Failed, so now we have to fix the conflict's 
+4. (merge|MERGING)
+	So we are merging against the master so we are in a MERGING state or neither in a clean working directory or in a staged area or in between state of merging.
+10. Open the conflicted file simple.html and manually merge the changes
+We can see some extra tags such as HEAD and real-work which is the branch name. This is nothing but Git will markup or show up or highlight the differences. So in simple.html the difference's are marked as follows
+/****************************************************************************************/	
+A. Difference at Area 1
+<<<<<<< HEAD
+	<title>A Very Respectful Website</title>
+=======	
+	<title>A Great Website</title>
+>>>>>>> real-work
+
+B. Difference at Area 2
+	<p>
+<<<<<<< HEAD
+	I'm not sure what will go here but i am sure it will be nice
+	</p>
+  </main>
+  <footer class="container">
+	<p>&copy; 2002 github.com</p>
+=======
+	Some interesting stuff goes here
+	</p>
+  </main>
+  <footer class="container">
+	<p>@copy; 2020 github.com</p> 
+>>>>>>> real-work
+
+C. Difference at Area 3
+
+
+
+/****************************************************************************************/
+So if we look at the first difference 
+
+<<<<<<< HEAD
+	<title>A Very Respectful Website</title>
+=======		
+Here HEAD is referencing to the target branch which is master, because we did a merge from the target branch which is our master branch. Here the contents are of simple.html present in master branch.
+
+and 
+
+=======	
+	<title>A Great Website</title>
+>>>>>>> real-work
+Here real-work is the new branch and the contents are of the simple.html presetn in real-work branch.	
+
+If the changes are simple then we can modify the files manullay merge the conflict and proceed.
+
+11. Open the conflicted file simple.html using mergetool and manually merge the changes
+Open the mergetool which we configured by providing the comman
+$ git mergetool
+This opens the file in diffmerge and merge it manually.
+
+There are 3 files now out of which 3 are created by git and one is our main simple.html file in which we should resolve the conflict.
+1) ./simple.html.REMOTE.4937.html
+2) ./simple.html.BASE.4937.html
+3) ./simple.html.LOCAL.4937.html
+
+Now where we have to manually pick and choose the respective content. Once done save and close the file.
+
+12. Check the status.
+Before merging the changes our brnach or prompt is in the (master|MERGING) state. So if we type
+$ git status
+	- The branch is master and its in the merging state (master|MERGING)
+	- We can see that the simple.html is modified and its in ready to be staged state.
+
+13. Commit the merged File simple.html
+Till now the status of the branch or prompt is (master|MERGING) and we have manually merged the file and now we need to do a commit. For that type the commit command
+$ git commit -m "Done resolving merge conflict"
+Once i have done the commit my prompt or branch stage has changed from (master|MERGING) to (master), which means i am out of the merge conflict.
+
+Note if i do a git status i can see one un-tracked file named simple.html.orig and thats because resolving the merge git will save of an original copy of the merge conflicts so that something got lost we can revert the changes. However i don't want to track the *.orig files so that we can go and add it in the .gitignore list now if we do a git status we can no longer see the *.orig file. Now we commit the .gitignore file.
+
+14. Delete the real-work branch
+Now we have integrated the changes now we can get rid of the branch
+$ git branch -d real-work
+
+15 View the Log
+$ git log --oneline --decorate --graph --all
+I can see that i have done resolving merge conflicts, which is a merge commit. followed by the latest commit which i did for commiting .gitignore file to exclude the *.orig files.
+
+-----------
++ Rebasing
+-----------
+
+
+
+
+
+
+
+
+
+
