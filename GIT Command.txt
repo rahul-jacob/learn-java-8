@@ -141,6 +141,11 @@ git checkout -b salesorder (Created a sales order branch local repo)
 git push origin salesorder (Created a sales order branch on remote repo)
 git checkout -b develop origin/develop
 
+Deleting a branch from Remote
+-----------------------------
+git push origin --delete branchName
+
+git push origin --delete jpa-many-to-many-basic
 
 Delete Branch
 -------------
@@ -276,11 +281,18 @@ Please take the backup of your changes before giving the step 2
 git reset --hard b5beb75242d1562ea9f46fead6ab43bf042c8ef0
 HEAD is now at b5beb7524 Print volume code added
 3. Take latest pull to get all the codes
+
+Reverting the local repository with the remote repository
+---------------------------------------------------------
+Setting your branch to exactly match the remote branch can be done in two steps:
+git fetch origin
+git reset --hard origin/master
+
 **************************************************************
 Configuring your email and username
 -----------------------------------
-$ git config --global user.name "First Last"
-$ git config --global user.email "myemail@domain.com"
+$ git config --global user.name First Last
+$ git config --global user.email myemail@domain.com
 
 Listing your configuration properties
 -------------------------------------
@@ -1013,6 +1025,8 @@ git difftool master origin/master
 + Branching and Merging
 -----------------------
 
+1. Introduction
+---------------
 As of now we are doing all our changes in the master, which is not a best practice. What we should be doing is separating our changes into branches which makes sence. At the simplest level we should be atleast be creating a feature branches or topic branches to isolate our changes and then integrate them back to the master branch once this feature or topic is stabilized or completed.
 
 To start of branches we will start with the listing of branch
@@ -1067,6 +1081,10 @@ Now we modified the branch name from mynewbranch to newbranch.
 Now if we type git branch -a
 We can see that mynewbranch is renamed to newbranch.
 
+List All Branches From Remote
+-----------------------------
+git branch --remote
+
 Delete a branch
 ---------------
 If we no longer need a branch
@@ -1091,8 +1109,8 @@ eg
 $ git branch -D ppd_common_feature
 Deleted branch ppd_common_feature (was 2d7589e).
 
-Fast Forward (Happy Path)
--------------------------
+2. Fast Forward (Happy Path)
+----------------------------
 Now let's start some branching and merging examples.
 
 1. go to the repository
@@ -1107,6 +1125,7 @@ $ git checkout -b title-change
 $ git commit -am "simple.html file changed"
 7. check the log
 $ git log --oneline
+8. Perform Merging
 We can see our commit at the top. So we have currently commited a change in the title-change branch and we need to move it into master.
 First thing we need to do is 
 a) Change back to master branch
@@ -1123,65 +1142,82 @@ Doing so git will respond to the merge
 	3.Fast-forward - It tells that the merge is a fastforwarded one
 	4.simple.html - the files involved in the merge
 	5.Status - deleted or inserted count.
-Fast forwarded Merge
---------------------
+
 Since this was a fast forwarded merge, effectively what just happened was Git just placed all the commits on the master branch as if we never branch away.
 Fast forwarding is only really possible when there are no changes being made in the target branch, which is what we just did. We created a branch did some changes and we merged back. we didn't do any additional work in the master or target branch before doing the merge.
 
-Now we view the log
+9. Now we view the log
 $ git log --oneline --graph --decorate
-Now we can see the HEAD is pointing to the lastest commit on the current branch. And the title-change and master is also pointing to the same commit as well. Now if we list our branches 
+Now we can see the HEAD is pointing to the lastest commit on the current branch. And the title-change and master is also pointing to the same commit as well. 
+10. Delete the branch
+Now if we list our branches 
 $ git branch
 Now we can see 2 branches master and title-change, since we have already merged the title-change to our master we no longer need it so to delete the branch we type the command
 $ git branch -d title-change
 Now if we type git branch we can see only the master branch.
+11. Now we view the log
 Now if we type git log
 git log --oneline --graph --decorate
 At the top commit we can see only the master branch. the title-change is removed.
 
-Disable Fast forward Merge (Happy path without fast forward)
-------------------------------------------------------------
+3. Disable Fast forward Merge (Happy path without fast forward)
+---------------------------------------------------------------
 We need to be in a clear working directory. Once typeed 
 git branch
 we can see only the master branch.
+
 1. Now lets us create a branch add-copyright
 $ git checkout -b add-copyright
 Now the branch has been created and we have switched into it.
 If we type git branch 
 we can see the newly created branch add-copyright and an asterisk against it.
+
 2. Lets modify the file by adding a copyright details and the start and end of the html file.
 Save the file.
+
 3. Now check the status by
 $ git status
+
 4. Now we commit the file
 $ git commit -am "Adding copy right information"
+
 5. Now we also modify the README.md file
 Save the file
+
 6. Now we commit the file 
 $ git commit -am "Adding copyright info to README.md file"
 Now we have 2 files commited in the add-copyright branch.
+
 7. Now if we check our logs
 $ git log --oneline --decorate --graph
 Now you can see the copyright information at the top. Press q to exit and lets integrate the changes to our master branch.
+
 8. For that first switch to Master branch from add-copyright branch
 $ git checkout master
+
 9. For Merging the add-copyright branch to master type the code
-  git merge add-copyright
 Now this time i want to preserve the fact that we branched off so i am going to disable the fast forwarding capability by specifying the --no-ff option
-$ git merge add-copyright --no-ff
+	$ git merge add-copyright --no-ff
 Now when we press enter its going to do a merge commit. So we end up with a commit message which the editor displays as 'Merge branch add-copyright'. So now we want to save and close.
+We get the below message
+Merge made by the 'recursive' strategy.
+ index.html | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
 10. Now we check the log
 $ git log --oneline --decorate --graph
 Now if we look at the logs we can see the graph line being preserved.
-11. Now we have integrated the changes now we can get rid of the branch
+11. Delete the brach
+Now we have integrated the changes now we can get rid of the branch
 $ git branch -d add-copyright
+
 12. Now if we view the log
 $ git log --oneline --graph --decorate
 we can see that the we don't have the label's or branch-name associated when we branch off. i.e the branching still occurs but we don't have a label associated that's all.
 
-Automatic Merges
-----------------
-So Now we have covered how to create a branch, do some work on it and merge it into master. But in the happy path scenario where we result in a fast forward merge, even going as far as to disable the fast forward merge scenario but we still have that condition present. So the next step is to go through the process but this time there will be an automatic merge and result in a merge commit automatically.
+4. Automatic Merges
+-------------------
+So Now we have covered how to create a branch, do some work on it and merge it into master. But in the happy path scenario where the result is a fast forward merge, even going as far as to disable the fast forward merge scenario but we still have that condition present. So the next step is to go through the process but this time there will be an automatic merge and result in a merge commit automatically.
 
 We need to be in a clear working directory. Once typeed 
 git branch
@@ -1191,42 +1227,60 @@ $ git checkout -b simple-changes
 Now the branch has been created and we have switched into it.
 If we type git branch 
 we can see the newly created branch add-copyright and an asterisk against it.
+
 2.Now lets edit first file that is independent of each other.
  - make changes for file1
  git status we can see file1 is modified.
+
 3. Commit the file
  git commit -am "File Modified 1 in simple-changes branch"
+
 4.Now lets edit second file that is independent of each other.
  - make changes for file2
  git status we can see file1 is modified.
+
 5. Commit the file
  git commit -am "File Modified 2 in simple-changes branch"
+
 6. For that first switch to Master branch from add-copyright branch
 $ git checkout master 
+
 7. Before merging the changes in i am going to make change to a file in the master. This could be done by another developer or you can do the change by context switching (branch switching) so lets update the README.md file (Note that you should change a file which you have not updated in the simple-changes branch....)
 Save the file and type git status, we have one modified file.
+
 8.Now the commit the file in master branch
 $ git commit -am "Commiting file info master branch"
+
 9. Now if we view the log
 $ git log --oneline --decorate --graph
 You can see an interesting thing in the top of the log, we have a commit on the simple changes that is different and we have a commit on the master.
+
 10. Now Merge the code from simple-changes to master
 So from master, we do the merge
 $ git merge simple-changes -m "Merging changes from simple-changes to master"
  where -m is the message.
 Since we know that this merge results in a commit so in quotes we give the commit message.
+Then you get the below text as response from git
+Merge made by the 'recursive' strategy.
+ help.txt   | 2 ++
+ index.html | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
 11 Repeat the git log command
 $ git log --oneline --decorate --graph --all
 So if you notice the top log, so we can see that when the merge happended. that we have the merge commit and the simple-changes is still preserved as a separate branch. 
+
 12. Now we have integrated the changes now we can get rid of the branch
-$ git branch -d simple-changes.
-12. Now if we view the log
+$ git branch -d simple-changes
+
+13. Now if we view the log
 $ git log --oneline --graph --decorate
 we can see that the we don't have the label's or branch-name associated when we branch off. i.e the branching still occurs but we don't have a label associated that's all.
-13. Now we check and ensure that our file changes are present.
 
-Conflicting Merges and Resolution
----------------------------------
+14. Now we check and ensure that our file changes are present.
+
+5. Conflicting Merges and Resolution
+------------------------------------
 Now we will understand and resolve merge confilicts.
 Most of the times you will be doing a fast forward merge or merges that could result in fast forward or GIT is going to resolve the merges automatically. However sometimes you are going to run into conflicts and you are going to need to resolve them. lets see with an example.
 
@@ -1378,6 +1432,418 @@ I can see that i have done resolving merge conflicts, which is a merge commit. f
 -----------
 + Rebasing
 -----------
+
+1. Simple Rebase Example
+------------------------
+In order to understand the concept of rebasing. We have to do some steps.
+1. From the master bracnch creature a feature branch.
+2. And in the feature branch do some work atleast 3 commits.
+3. Later on switch back to master and do some work atleast 3 commits.
+4. And rebase my changes back to the feature branch.
+
+So consider we have a master branch 'rebase-master' and feature branch called 'rebase-test'
+1. We switch to 'rebase-test' 
+$ git checkout rebase-test.
+2. We add server.port in application.properties file 
+## Added Server Port 
+#server.port=8009
+3. Then we do a express commit
+$ git commit -am "server.port added to application.properties"
+4. We again add logging.file in application.properties
+## Added Log File
+#logging.file=springbootdemo.log
+5. Then we do a express commit
+$ git commit -am "logging.file added to application.properties"
+6. Now we switch to master branch
+$ git checkout rebase-master
+7. Now we will modifiy the pom.xml by adding some comments
+Add the comment for maven-plugin
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-maven-plugin -->
+8. Then do a express commit
+$ git commit -am "Comment added for maven-plugin in pom.xml"
+8. Now again we will modifiy the pom.xml by adding another comments
+Add the comment for springboot-web
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+9. Then do a express commit
+$ git commit -am "Comment added for springboot-starter-web in pom.xml"
+10.Let take a look at our history
+$ git log --oneline --decorate --all --graph
+/********************************************************************************************/
+* 536dfa5 (HEAD -> master-rebase) comment added for springboot-starter-web in pom.xml
+* e6f3f9c comment's added for maven-plugin in pom.xml
+| * 5a3cc62 (rebase-test) logging.file configuration added in application.properties
+| * b5e9d0e server.port configuration added in application.properties
+/********************************************************************************************/
+Now you can see in the above, o/p you can see the master-rebase and rebase-test they are in separate lines and you can see the graph line diverging. So in a rebasing scenario i am not done with my feature but i want to incorporate any changes that may have happened on master. so i will have a massive headache when i do merge later. so to do that i can use rebase. So i want to rebase master (master-rebase) into my feature branch (rebase-test). 
+11. So i am returning to feature branch 
+$ git checkout rebase-test
+Now that i am in rebase-test feature branch lets rebase in any changes that we have made on the master branch and then lets see how it has effected our history.
+12. Git Rebase Command
+lets use the git rebase command and on the branch in which you want to do a rebase into we type
+syntax : git rebase source-branch
+eg: git rebase feature
+$ git rebase master-rebase
+/********************************************************************************************/
+First, rewinding head to replay your work on top of it...
+Applying: server.port configuration added in application.properties
+Applying: logging.file configuration added in application.properties
+/********************************************************************************************/
+So the rebase command is saying its rewinding our head which is our current branch so that we can reapply any changes we have made on top of what every has happened on master.
+So finally what every changes in master i.e changes in the pom.xml will be taken and then our changes related to application.properties will be addded on top of it. Hence its says first rewinding head to replay your work on top of it.
+13.Let take a look at our history
+$ git log --oneline --all --decorate --graph
+/********************************************************************************************/
+* 496b09d (HEAD -> rebase-test) logging.file configuration added in application.properties
+* 158b30e server.port configuration added in application.properties
+* 536dfa5 (master-rebase) comment added for springboot-starter-web in pom.xml
+* e6f3f9c comment's added for maven-plugin in pom.xml
+| * baa6a97 (origin/master, master) modified source
+/********************************************************************************************/
+Now you can see now we have the master applied first then our feature is applied.
+In order for this to happen from our branch i.e 'rebase-test' we had to rewind the changes what has happened (application.properites) and then add or playback the changes on master-rebase (pom.xml) on the 'rebase-test'. And then apply the changes on the 'rebase-test' branch. In doing so it flattened my history. And it also allow us to do a fast forward merge once we have done changes on our feature.
+14.Now from the feature branch 'rebase-test' we will modify pom.xml
+Add the comment for springboot-jpa
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
+15. Then do a express commit
+$ git commit -am "Comment added for springboot-starter-jpa in pom.xml"
+16.Let take a look at our history
+$ git log --oneline --decorate --all --graph
+/********************************************************************************************/
+* b164978 (HEAD -> rebase-test) Comment added for springboot-starter-jpa in pom.xml
+* 496b09d logging.file configuration added in application.properties
+* 158b30e server.port configuration added in application.properties
+* 536dfa5 (master-rebase) comment added for springboot-starter-web in pom.xml
+* e6f3f9c comment's added for maven-plugin in pom.xml
+/********************************************************************************************/
+Now if you see the recent commit has moved up one level. Now the last commit is at the top.
+Now i am done with the feature branch lets merge the feature with our master
+16. Merging feature branch 'rebase-test' to 'master-rebase'
+$ git checkout master-rebase
+$ git merge rebase-test
+17. Now view the logs
+$ git log --oneline --decorate --graph --all
+/********************************************************************************************/
+* b164978 (HEAD -> master-rebase, rebase-test) Comment added for springboot-starter-jpa in pom.xml
+* 496b09d logging.file configuration added in application.properties
+* 158b30e server.port configuration added in application.properties
+* 536dfa5 comment added for springboot-starter-web in pom.xml
+* e6f3f9c comment's added for maven-plugin in pom.xml
+/********************************************************************************************/
+Now we can see both the master-rebase and rebase-test point to the same commit id.
+18. Delete the rebase-test branch
+Now we have integrated the changes now we can get rid of the branch
+$ git branch -d rebase-test
+
+2. Setup for rebasing conflicts
+-------------------------------
+For this exercise we have created 2 branches
+a) master-rebase (master)
+b) rebase-conflict (feature)
+
+1. Modify pom.xml in master
+Add the message in pom.xml above dependencies tag
+<!-- Adding Changes to rebase-master before rebase conflicts -->
+
+2. Then we do a express commit
+$ git commit -am "Adding Message in pom.xml Before Rebase Conflicts"
+
+3. Now we switch on to feature branch rebase-conflict
+$ git checkout rebase-conflict
+
+4. Now we have to do some conflicting changes
+Open pom.xml and modify the following tags description, version and scope.
+save.
+
+5. Then we do a express commit
+$ git commit -am "Modified pom.xml for conflicts"
+
+6. Now we switch on to master branch
+$ git checkout master-rebase.
+
+7. Now we will make some changes on the same file pom.xml so that we will get a conflict.
+Open pom.xml and modify the following tags description, version and scope.
+save.
+
+8. Then we do a express commit
+$ git commit -am "Modifed pom.xml for conflicts"
+
+9. We check the logs
+$ git log --oneline --all --graph --decorate
+/********************************************************************************************/
+* de3926f (HEAD -> master-rebase) Modifed pom.xml for conflicts in master-branch
+* af753d3 Adding Message in pom.xml Before Rebase Conflicts
+| * 92f0c76 (rebase-conflict) Modified pom.xml for conflicts
+/********************************************************************************************/
+Now on the top we have 2 commits one on each branches. Here we have master-rebase and rebase-conflict which are diverged.
+Also we have now completed the setup of raising a conflict.
+
+3. Abort a Rebase.
+------------------
+We have setup a conflict situation for our pom.xml in master-rebase and rebase-conflict branches.
+1. Switch to feature branch
+$ git checkout rebase-conflict
+
+2. View difference in pom.xml b/w master-rebase and rebase-conflict
+$ git difftool first-branch second-branch
+$ git difftool master-rebase rebase-conflict
+We have seen that there are many places or lines which will result in a conflict.
+
+3. Now we will try to rebase our master 'master-rebase'
+$ git rebase master-rebase
+/********************************************************************************************/
+First, rewinding head to replay your work on top of it...
+Applying: Modified pom.xml for conflicts
+Using index info to reconstruct a base tree...
+M       pom.xml
+Falling back to patching base and 3-way merge...
+Auto-merging pom.xml
+CONFLICT (content): Merge conflict in pom.xml
+error: Failed to merge in the changes.
+Patch failed at 0001 Modified pom.xml for conflicts
+Use 'git am --show-current-patch' to see the failed patch
+
+Resolve all conflicts manually, mark them as resolved with
+"git add/rm <conflicted_files>", then run "git rebase --continue".
+You can instead skip this commit: run "git rebase --skip".
+To abort and get back to the state before "git rebase", run "git rebase --abort".
+/********************************************************************************************/
+From this point we have to perform manually. We have different alternatives.
+a) To abort rebase : We can abort rebase by typing the command $ git rebase --abort
+b) To resolve manully
+Manually resolve the file pom.xml and add the file and commit. then do continue the rebase operation by typing the command $ git rebase --continue
+c) To skit the commit : you can remove your commit and proceed with a rebase by typing the command $ git rebase --skip
+
+4. Abort Rebase 
+As expected the rebase resulted in a conflict so for this we can abort a rebase we type the command
+$ git rebase --abort
+
+5.Now check the log
+$ git log --oneline --all --graph --decorate
+* de3926f (master-rebase) Modifed pom.xml for conflicts in master-branch
+* af753d3 Adding Message in pom.xml Before Rebase Conflicts
+| * 92f0c76 (HEAD -> rebase-conflict) Modified pom.xml for conflicts
+We can see nothing is changes, we can see the 2 branches are diverged.
+
+4. Rebase Conflict and Resolution
+---------------------------------
+In order to resolve the conflict we need to swith to rebase-conflict branch
+$ git checkout rebase-conflict
+
+1. View the history
+$ git log --oneline --all --graph --decorate
+* de3926f (master-rebase) Modifed pom.xml for conflicts in master-branch
+* af753d3 Adding Message in pom.xml Before Rebase Conflicts
+| * 92f0c76 (HEAD -> rebase-conflict) Modified pom.xml for conflicts
+We can see nothing is changes, we can see the 2 branches are diverged.
+
+2.Now do a rebase
+$ git rebase master-rebase
+/********************************************************************************************/
+First, rewinding head to replay your work on top of it...
+Applying: Modified pom.xml for conflicts
+Using index info to reconstruct a base tree...
+M       pom.xml
+Falling back to patching base and 3-way merge...
+Auto-merging pom.xml
+CONFLICT (content): Merge conflict in pom.xml
+error: Failed to merge in the changes.
+Patch failed at 0001 Modified pom.xml for conflicts
+Use 'git am --show-current-patch' to see the failed patch
+
+Resolve all conflicts manually, mark them as resolved with
+"git add/rm <conflicted_files>", then run "git rebase --continue".
+You can instead skip this commit: run "git rebase --skip".
+To abort and get back to the state before "git rebase", run "git rebase --abort".
+/********************************************************************************************/
+as expected you will get the conflict now we are in a conflicting state during a rebase. we can consider this as a merge-conflict and resolve the conflicts manually and proceed.
+
+3.Now open visual tool and merge the code
+git mergetool
+manually merge and save the file.
+
+4.Check the status
+$ git status
+Now we can see the file which we manually resolved the conflict. And its in modified stage and ready to
+Note : You can see the file is ready to commit, but don't do an express commit in this stage. Always add the file first whenever there is a conflict.
+
+5. Add the manually resolved file.
+$ git add <modified_file>
+
+6. Now proceed with rebase
+$ git rebase --continue
+Now we have resolved the rebase conflict and our stage has been changed from rebase conflict to branch active state.
+
+7. View the history
+$ git log --oneline --all --graph --decorate
+/********************************************************************************************/
+* 8037714 (HEAD -> rebase-conflict) Modified pom.xml for conflicts
+* 9a21424 Conflicts Resolved for pom.xml during rebase
+* de3926f (master-rebase) Modifed pom.xml for conflicts in master-branch
+* af753d3 Adding Message in pom.xml Before Rebase Conflicts
+* baa6a97 (origin/master, master) modified source
+/********************************************************************************************/
+Now that we can see that we have aplied our master commit. and then our feature branch commit.	
+
+8. Now we change the pom.xml file again
+Save and check the status $ git status
+
+9. Do Express commit
+$ git commit -am "Commiting code after rebase conflict"
+
+10. View the history
+$ git log --oneline --all --graph --decorate
+/********************************************************************************************/
+* 8f1875d (HEAD -> rebase-conflict) Commiting code after rebase conflict
+* 8037714 Modified pom.xml for conflicts
+* 9a21424 Conflicts Resolved for pom.xml during rebase
+* de3926f (master-rebase) Modifed pom.xml for conflicts in master-branch
+/********************************************************************************************/
+Now we can see that our latest commit has come at the top.
+
+11. Now we are done with our changes let merge it to our master branch
+$ git checkout master-rebase
+$ git merge rebase-conflict
+
+12. View the history
+$ git log --oneline --graph --all --decorate
+* 8f1875d (HEAD -> master-rebase, rebase-conflict) Commiting code after rebase conflict
+* 8037714 Modified pom.xml for conflicts
+* 9a21424 Conflicts Resolved for pom.xml during rebase
+Now we can see that both the master-rebase, rebase-conflict branch point to the same commit.
+
+
+4. Pull with Rebase (How to Rebase Incomming changes from github on to your local repository)
+---------------------------------------------------------------------------------------------
+In this example i want to show some incoming changes from github on to our local repository.
+
+For this example we create a branch rebase-pull
+$ git branch rebase-pull
+$ git checkout rebase-pull
+1. Modify the file pom.xml
+Save
+2. Express Commit pom.xml
+$ git commit -am "local : Changes to pom.xml"
+
+3. Go to browser github select the branch and modify pom.xml
+Save
+
+4. Commit the file and give the message "remote: simple changes to pom.xml from browser"
+
+5. Now in gitbash check the status
+$ git status
+
+6. Update the reference on the local from the remote repository by giving fetch command
+$ git fetch origin rebase-pull
+
+7. Now check the status
+$ git status
+Now we can see that your branch and the 'origin/rebase-master' have diverged and have 1 and 1 different commit each.
+
+8. Now we do a rebase
+Now lets say i want to continue working i am not ready to merge like a traditional merge.
+So what i need is i rather put my commit or my changes ahead of what ever is there on github (rebase-pull branch). But i want the benefit of any changes that may have occured in github. so for that we can issue the git pull command by passing in an extra parameter because of rebase during the process.
+
+$ git pull --rebase origin rebase-pull
+So this is our standard command, except that now we are using the --rebase option because of rebase instead of normal merge.
+Press Enter, now we have rebased our changes from github on top of our master branch on our local repository. 
+
+9. Now check the status
+$ git status
+Now we can see that our branch is simply ahead of 'origin/rebase-pull' by one commit.
+
+10. View the history
+$ git log --oneline --all --graph --decorate
+So we can see our origin/rebase-pull and our rebase-pull branch, the local rebase-pull branch is on top on origin/rebase-pull.
+
+-----------
++ Stashing
+-----------
+In this session we will look upon various scenarios to execute a stash.
+
+1. Simple Stash Example
+-----------------------
+Create a branch called 'master-stash' and 'stash-test'
+
+1. Switch on to master-stash branch
+Modify the pom.xml and Save.
+
+2. Now check the status
+$ git status
+We can see that the pom.xml is modified. However the pom.xml in my case is going to be a work-in-progress i am not ready to commit the file in this state. However i need to change my gears and modify a different file for something that has to get right now. In order to save the changes that i have for pom.xml i can use git stash command to shash away any changes that are work-in-progress. So that i can change gears and work-on something else.
+
+3. Save the Work-In-Progress File using Stash command
+$ git stash
+or $ git stash save
+When we type git stash by default it will execute the save command. 
+When i pressed Enter i got the below message
+Saved working directory and index state WIP on master-stash: baa6a97 modified source
+
+4. Now check the status
+$ git status
+Now we can see that we are in a clean working directory. There are no files in the staging area for commit or anything that is in the staging area. So if i open my pom.xml i can see that its the same file. and i am not able to see my recent changes.
+
+5. Add changes to application.properties
+Well lets go and do some changes i open the application.properties file and add the server.port=8009
+Save
+
+6. Now check the status
+$ git status
+Now you can see that the application.properties is modified.
+
+7. Commit the file
+Now we do an express commit
+$ git commit -am "master : Changes to application.properties in master-stash branch"
+
+8. Now check the status
+$ git status
+Now we can see that we are in a clean working directory.
+
+9. Fetching or Retrieving the stashed Work-In-Progress File
+Now how do we retrieve the stashed file, now that i have completed the high priority task i want to resume my work where i stopped. so how do i retrieve my saved file.
+So for this we need to apply our stash, type the command
+$ git stash apply
+Now lets review the changes, the git stash apply will then give us a git status basically on our working directory which applies what action that the git stash apply command has to do. In this case it put back the pom.xml file into its original stage which is in the working directory changes. Git status also gives us the same information.
+Now lets open and verify the pom.xml file. We can see that the discription is back to the was it (<description>From Master. Understanding Stashing Example</description>) before issueing a git stash command. Now we can continue our work from this point onwards. do the necessary changes and save
+
+8. Now check the status
+$ git status
+Now we can see the modified file pom.xml
+
+9. Commit the changes
+Let do an express commit 
+$ git commit -am "In Master modifying pom.xml"
+Now we are done with our commits.
+
+10. Now check the status
+$ git status
+Now we can see that we are in a clean working directory.
+
+Save Command
+------------
+Saves the file
+$ git stash save, the save command is optional we can also type git stash
+
+List Command
+------------
+Now lets look at the list subcommand of stash
+$ git stash list : list's all the stashes
+stash@{0}: WIP on master-stash: baa6a97 modified source
+
+We have a single item 'stash@{0}:' which is referenced at 0 where we start off with any list. 
+'WIP' indicated its Work-In-Progress
+and the master-stash is the branch with the reference Id 'baa6197'
+and next is the commit message.
+Since we have already applied the stash we do not need it anymore, which means we can drop the stash
+
+Drop a stash
+------------
+To drop a stash type the command
+$ git stash drop
+Dropped refs/stash@{0} (ed493b4498d5df52d64f8264d31af797c1c07cf1)
+And that would drop the last stash.
+
+2. Stashing Untracked files and Using Pop
+-----------------------------------------
 
 
 
