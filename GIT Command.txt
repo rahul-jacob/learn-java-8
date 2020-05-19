@@ -1,3 +1,9 @@
+------------------------------------------------
+To display all the files that are tracked by git
+------------------------------------------------
+git ls-files
+This lists all the files that git is tracking.
+
 ---------------------------------------------
 Displaying current User and Email of the repo
 ---------------------------------------------
@@ -1823,6 +1829,13 @@ Save Command
 Saves the file
 $ git stash save, the save command is optional we can also type git stash
 
+Stash the file with a stash message
+-----------------------------------
+However to stash before we used the command
+the git stash command is fine if you are doing only one stash at a time. But in this case i actually want to specify a stash message so this one is going to be like a commit message, but for a stash. This will make us easier to differentiate between different stashes.
+$ git stash save "simple changes for pom.xml"
+Now we have created a stash with the stash message "simple changes for pom.xml"
+
 List Command
 ------------
 Now lets look at the list subcommand of stash
@@ -1842,10 +1855,486 @@ $ git stash drop
 Dropped refs/stash@{0} (ed493b4498d5df52d64f8264d31af797c1c07cf1)
 And that would drop the last stash.
 
+Droping a specific stash reference
+----------------------------------
+In order to drop a specific stash reference we use the command git stash drop stash_reference.
+$ git stash drop stash@{1}
+
+Delete all the stashes from the stash list
+------------------------------------------
+There might be a situation we need to delete or clear all the stashes from the stash list then we use the clear command.
+$ git stash clear
+
+eg: 
+$ git stash list
+stash@{0}: On master-stash: simple changes for SpringbootDemoApplication.java
+stash@{1}: On master-stash: application.properties changes
+stash@{2}: On master-stash: simple changes for pom.xml
+
+$ git stash clear
+This will empty all the stashes in the list.
+
+Picking our a specific stash
+----------------------------
+For picking up a specific stash we use the command git stash show reflog_syntax
+where reflog syntax allows us to reference the specific stash to show and that would be "stash" and then "@" symbol and then, in curly braces, the stash index you wish to look at, in this case i am going to use "1".
+eg : $ git log show stash@{1}
+$ git stash show stash@{1}
+ src/main/resources/application.properties | 5 ++++-
+And then in comes back and tells us that application.properties is a part of that stash.
+
+Applying stash to a new branch
+------------------------------
+Now lets go and apply stash to a new branch. And in order do so we have the below syntax
+	$ git stash branch branchName
+		where branchName is the name of the branch
+And to do that we are going to issue the command 
+$ git stash branch branch-stash-test
+
+
 2. Stashing Untracked files and Using Pop
 -----------------------------------------
+By default stash command will only stash tracked files.
+
+$ git ls-files - tracks all the files that GIT is monitoring
+
+$ git ls-files
+.gitignore
+.mvn/wrapper/MavenWrapperDownloader.java
+.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+mvnw
+mvnw.cmd
+pom.xml
+src/main/java/com/xyz/spring/raul/SpringbootDemoApplication.java
+src/main/resources/application.properties
+src/main/resources/banner.txt
+src/test/java/com/xyz/spring/raul/SpringbootDemoApplicationTests.java
+
+1.So we open our pom.xml
+Modify the pom file by including some comments like <!-- Springboot Web Dependency -->	& <!-- Springboot JPA Dependency -->
+Save the file.
+
+2.We check the status
+$ git status
+We can see that we have the "Changes not staged for commit" This is the status that is given to working directory changes for files that are been tracked by git. However if i decide to add a new file.
+
+3.Adding a new file
+$ npp newFile.txt
+
+4.We check the status
+$ git status
+Now if you check the status, we have a slightly different status for new files; these are files that Git is not tracking yet. So if i do a "git stash" git stash will only get the modified file which is pom.xml
+
+5.Do a Git Stash
+$ git stash
+Saved working directory and index state WIP on master-stash: baa6a97 modified source
+to verify this we  check the status
+
+6.We check the status
+$ git status
+On branch master-stash
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        newFile.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+We still have the untracked file. which means our working directory is not clean. So i am going to re-apply.
+
+For that we first pop the stashed file so that we can have both the tracked and untracked file. so for that we do a git stash apply
+$ git stash apply.
+
+Secondly we delete the value in the stack git stash drop
+$ git stash drop
+
+Finally we verify we don't have any stashed files by the list attribute
+$ git stash list
+now we can see that we don't have any stashes pending.
+
+If we check the status
+$ git status
+On branch master-stash
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   pom.xml
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        newFile.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+7.Stashing an untracked file.
+To stash an untracked file we have couple of options, we could simply add the new file to the Git Staging Area. So once that occurs Git will start tracking the file. However if you are not sure if you want to add that file, but you still want to stash it so you can determine that later, then we have an extra parameter for the git stash command. 
+Well let's do that now so we just do a git stash -u
+$ git stash -u
+Then git stash command will then include any untracked files. that are not being excluded by .gitignore. Now if we do a git status
+
+8.We check the status
+$ git status
+Now we have a clean working directory.
+
+9.Verify the stashes
+$ git stash list
+stash@{0}: WIP on master-stash: baa6a97 modified source
+We can see we have one stash file.
+
+10.Modify the application.properties files
+we add the
+## Doing an emergency fix after our stash.
+server.port=8088
+Save the file.
+
+11.Now commit the application.properties
+$ git commit -am "Adding Fix after doing stashing files"
+
+12.Verify the status
+$ git status
+Now we have a clean working directory.
+
+13.Applying the changes from stash
+After we have done our emergency fix, Now lets go ahead and apply our changes that we have in our stash. However this time i am going to show you an express way of doing that. Earlier we have to do two commands
+a) $ git stash apply
+b) $ git stash drop
+Now if we want to apply and drop the last stash in the list of stashes so now we can do that in one command 
+$ git stash pop
+For people who are coming from a programming background this is like popping the stack.
+$ git stash pop
+On branch master-stash
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   pom.xml
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        newFile.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (a29afbbce926d2c53d7cfb96ae51d5466f64a868)
+
+Now we have the modified file pom.xml and our untracked file newFile.txt back in our working directory. Now if you see the console message "Dropped refs/stash@{0} (a29afbbce926d2c53d7cfb96ae51d5466f64a868)" means we have droped the stash too.
+
+14.Verify the status
+$ git status
+Now we have both the modified file and the untracked file in the working directory.
+
+15.Deleting the untracked file.
+We are not interested in the new file, so we are deleting it.
+$ rm newFile.txt
+
+16.Verifying the status
+$ git status
+Now we can see only the modified pom.xml file.
+
+17.Commit the file.
+We do an express commit.
+$ git commit -am "Commiting the file after doing a git stash pop command."
+
+18.Verifying the status
+$ git status
+Now we have a clean working directory.
 
 
+3. Managing Multiple Stashes
+----------------------------
+I am in a clean working directory master-stash branch. Now lets work with multiple stashes by modifying couple of files from the working directory.
+
+1.Modify pom.xml
+Modify pom.xml by providing the comment for jpa and web.
+Save.
+
+If we do a git status
+$ git status
+On branch master-stash
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   pom.xml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+2.Stash the file.
+However to stash before we used the command
+$ git stash 
+the git stash command is fine if you are doing only one stash at a time. But in this case i actually want to specify a stash message so this one is going to be like a commit message, but for a stash. This will make us easier to differentiate between different stashes.
+$ git stash save "simple changes for pom.xml"
+Now we have created our first stash.
+
+3.Modify application.properties
+Modify applcation.properties by adding 
+server.port=8099
+Save.
+
+4.Stash the file.
+$ git stash save "simple changes for application.properties"
+Now we have created our second stash.
+
+5. Modify SpringbootDemoApplication.java
+Provide a line in our main method()
+eg. System.out.println("Multiple Stashing Example for Git");
+
+6.Stash the file.
+$ git stash save "simple changes for SpringbootDemoApplication.java"
+Now we have created our third stash.
+
+7.List all stashes
+In order to list all the stashes we use the command
+$ git stash list
+stash@{0}: On master-stash: simple changes for SpringbootDemoApplication.java
+stash@{1}: On master-stash: application.properties changes
+stash@{2}: On master-stash: simple changes for pom.xml
+
+Now you can see that the stash index is probably the reverse of what you are expecting; that the last stash in index "{0}". Now the index "{0}" may be a thing that's throwing you off as well but that comes from a programming background, where the indexs of the list or arry start with index 0. But the point to note here is the last stash is index 0 not 2. 
+
+8.Picking our a specific stash
+For picking up a specific stash we use the command git stash show reflog_syntax
+where reflog syntax allows us to reference the specific stash to show and that would be "stash" and then "@" symbol and then, in curly braces, the stash index you wish to look at, in this case i am going to use "1".
+eg : $ git log show stash@{1}
+$ git stash show stash@{1}
+ src/main/resources/application.properties | 5 ++++-
+And then in comes back and tells us that application.properties is a part of that stash.
+
+9.Verify the status
+If we type $ git status we can see that we have a clean working directory.
+$ git status
+
+10.Reapply stash
+Now we will reapply one of the stashes. So unlike other commands, we can specify the specific stash we want to apply with our "git stash apply" command. So currently we have a clean working directory and we can reapply the stash by the command
+Say we need to apply the middle stash. so for this first we list out the all the stashes
+$ git stash list
+stash@{0}: On master-stash: simple changes for SpringbootDemoApplication.java
+stash@{1}: On master-stash: application.properties changes
+stash@{2}: On master-stash: simple changes for pom.xml
+Now i want to apply the application.properties changes to my working directory
+For that i use the command git stash apply and then the stash reference "stash@{1}"
+$ git stash apply stash@{1}
+On branch master-stash
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   src/main/resources/application.properties
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+Now git stash will apply the specific changes that's captured in the stash. So now we have our modified application.properites file.
+
+
+11.Verify the status
+$ git status
+git status tells us that we have our modified "application.properites" file which is the same output from git stash apply command. Like the other commands we have covered the drop command will also take the stash reference. 
+so lets do a git stash list to see our list of stashes
+
+$ git stash list
+stash@{0}: On master-stash: simple changes for SpringbootDemoApplication.java
+stash@{1}: On master-stash: application.properties changes
+stash@{2}: On master-stash: simple changes for pom.xml
+
+And now we have applied the stash reference{1} which is the application.properties changes. I dont need them anymore so i am going to drop them. 
+
+12.Droping stash reference of index 1
+In order to drop a specific stash reference we use the command git stash drop stash_reference.
+$ git stash drop stash@{1}
+Dropped stash@{1} (2c73fcfa0857123550489171c1721f94067570a1)
+The stash has been droped. Now if we use the list command
+
+13.Listing all stashes
+$ git stash list
+stash@{0}: On master-stash: simple changes for SpringbootDemoApplication.java
+stash@{1}: On master-stash: simple changes for pom.xml
+
+We can see the stash with application.properties changes is not longer there; its no longer listed in our list of stashes. Also what's interesting is that the next stash available has gone in to populate the stashes at {1}, which is simple changes.
+
+14.Delete remaining stashes
+So next let's just say that the rest of the stashes I no longer need, for what ever reason. so i use the git stash clear command.
+$ git stash clear
+
+15.Listing all stashes
+$ git stash list
+Now we can see that the list is empty we have no results.
+
+
+4.Stashing into a branch
+-------------------------
+We have seen how to stash a file or files to a stash list. In this example we are going to see how can we stash the files to a branch.
+
+1.Modify pom.xml, application.properites and SpringbootDemoApplication.java.
+Make a small tweeks in the above 3 files.
+
+- Modify pom.xml
+Modify pom.xml by providing the comment for jpa and web.
+Save
+
+- Modify application.properties
+server.port=8099
+Save
+
+- Modify SpringbootDemoApplication.java
+System.out.println("Multiple Stashing Example for Git");
+Save
+
+2.Verify the status
+$ git status 
+Now as you can see that i have 3 modified files.
+
+3.Add one file to staging area
+So lets add pom.xml to staging area
+$ git add pom.xml
+
+4.Verify the status
+$ git status 
+We have pom.xml in the changes to be commited state which is in the staging area, and the rest are just not staged for commit; basically the modified files is in the working directory.
+
+5.Adding a new file
+Just for our complete demo we will add a new file.
+$ npp newFile.txt
+and we wrote New Contents as text.
+Save.
+
+6.Verify the status
+$ git status
+On branch stash-master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        modified:   pom.xml
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   src/main/java/com/xyz/spring/raul/SpringbootDemoApplication.java
+        modified:   src/main/resources/application.properties
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        newFile.txt
+
+So now we have files in 3 different buckets of Git. 
+1)Changes to be commited - thats the Git staging area that contains the pom.xml file.
+2)Changes not staged for commit - Two files that are modified in the working directory, so that's changes not staged for commit. files application.properites and SpringbootDemoApplication.java.
+3)Untracked files - Files that are not yet tracked by Git. Our new file newFile.txt lies with in this bucket.
+
+So doing all this work perhaps i have realized that this really does belong on a new feature branch not against master. So one of the favourite ways of all developers to correct this is actually to user Git's stash command to move all these changes to a feature branch.
+
+7.Moving all the changes to a feature branch
+So doing all this work perhaps i have realized that this really does belong on a new feature branch not against master. So one of the favourite ways of all developers to correct this is actually to user Git's stash command to move all these changes to a feature branch. so lets do that.
+First we need to add all the files that have been modified or that are new to a stash.
+$ git stash -u
+where -u parameter we are saving not only the modified files but also new files.
+
+8.Verify the status
+$ git status
+No local changes to save
+
+By doing a git status command we now have a clean working directory.
+
+9.Applying stash to a new branch
+Now lets go and apply stash to a new branch. And to do that we are going to issue the command 
+	$ git stash branch branchName
+		where branchName is the name of the branch
+
+$ git stash branch branch-stash-test
+Switched to a new branch 'branch-stash-test'
+<stdin>:9: trailing whitespace.
+<!-- Starter JPA Beg-->
+warning: 1 line adds whitespace errors.
+On branch branch-stash-test
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        modified:   pom.xml
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   src/main/java/com/xyz/spring/raul/SpringbootDemoApplication.java
+        modified:   src/main/resources/application.properties
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        newFile.txt
+
+Dropped refs/stash@{0} (563ae07143d6384033e4ef0ae4899987bc60d23d)
+
+When i pressed Enter, several things happened all at once. First of all the the new branch branch-stash-test is created. Then we switched into that branch, and then our stash is applied. And at the very end that same stash is dropped. We can confirm that by listing all the stashes
+	$ git stash list
+	It comes as empty. Currently there are no stashes in the stash list. And if we do a git status then we have the same output.
+	
+	
+10.Verify the status
+$ git status
+On branch branch-stash-test
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        modified:   pom.xml
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   src/main/java/com/xyz/spring/raul/SpringbootDemoApplication.java
+        modified:   src/main/resources/application.properties
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        newFile.txt
+
+Now we can see that we got the same output as the git stash branch command gave us; basically the same git status that we had back on stash-master prior to issuing the git stash command.
+
+11.Commiting our changes
+Now that we have done all this, lets go and ahead and commit our changes that we have.
+$ git add .
+Now we have added all the files to the staging area
+Now all the files are being modified and are in the changes to be commited state, that is our git staging area. So now all we have to do is commit.
+$ git commit -m "Changes after git status branch command we have stashed our new changes to a new branch"
+
+Now we have successfully commited our changes.
+So at this point i am done with this branch and i am going to integrate these changes to master-stash branch.
+
+12.Switching to master-stash branch
+So at this point i am done with this branch and i am going to integrate these changes to master-stash branch. So i am switching to our master branch
+$ git checkout master-stash
+
+13.Merge the new changes
+Now we are in master branch, lets merge the new changes from branch-stash-test branch to our master branch.
+$ git merge branch-stash-test
+Updating baa6a97..9d3ccf4
+Fast-forward
+ newFile.txt                                                      | 1 +
+ pom.xml                                                          | 2 ++
+ src/main/java/com/xyz/spring/raul/SpringbootDemoApplication.java | 1 +
+ src/main/resources/application.properties                        | 3 ++-
+ 4 files changed, 6 insertions(+), 1 deletion(-)
+ create mode 100644 newFile.txt
+
+Now that we have done that which resulted in a fast forward merge. So lets get rid of the branch-stash-test branch
+
+14.Deleting branch-stash-test branch
+git branch -d branch-stash-test
+
+Now that branch-stash-test branch is being deleted. if we list the branch
+$ git branch 
+this lists out all the local branches but we can't see branch-stash-test branch.
+
+-----------
++ Stashing
+-----------
 
 
 
