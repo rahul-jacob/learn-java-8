@@ -1,11 +1,15 @@
 package com.xyz.raul.util;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.xyz.raul.pojo.Developer;
+import com.xyz.raul.pojo.Item;
+import com.xyz.raul.pojo.Owner;
 import com.xyz.raul.pojo.Person;
+import com.xyz.raul.pojo.Pet;
 import com.xyz.raul.pojo.Student;
 
 
@@ -104,6 +108,27 @@ public final class Java8Util {
 		devList.add(new Developer("Anita", "Python", "9500", 1));
 		devList.add(new Developer("Basil", "Python", "2900", 0));
 		return devList;
+	}
+	
+	public static List<Item> getItems(){
+		return Arrays.asList(
+                new Item("apple", 10, new BigDecimal("9.99")),
+                new Item("banana", 20, new BigDecimal("19.99")),
+                new Item("orange", 10, new BigDecimal("29.99")),
+                new Item("watermelon", 10, new BigDecimal("29.99")),
+                new Item("papaya", 20, new BigDecimal("9.99")),
+                new Item("apple", 10, new BigDecimal("9.99")),
+                new Item("banana", 10, new BigDecimal("19.99")),
+                new Item("apple", 20, new BigDecimal("9.99"))
+        );
+	}
+	
+	public static List<Owner> getOwnerList(){
+		Owner owner1 = new Owner("John", "USA", "NYC", new Pet("Max", 5));
+		Owner owner2 = new Owner("Steve", "UK", "London", new Pet("Lucy", 8));
+		Owner owner3 = new Owner("Anna", "USA", "NYC", new Pet("Buddy", 12));
+		Owner owner4 = new Owner("Mike", "USA", "Chicago", new Pet("Duke", 10));
+	    return Arrays.asList(owner1, owner2, owner3, owner4);
 	}
 
 }
